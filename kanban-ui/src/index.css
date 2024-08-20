@@ -1,0 +1,86 @@
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  font-size: 62.5%;
+}
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+#root,
+#__next {
+  isolation: isolate;
+}
+
+:root {
+  --headerXL: 2.4rem;
+  --headerL: 1.8rem;
+  --headerM: 1.5rem;
+  --headerS: 1.2rem;
+  --white: #fff;
+  --black: #000112;
+  --verydarkgrey: #20212c;
+  --darkgrey: #2b2c37;
+  --linesdark: #3e3f3e;
+  --mediumgrey: #828fa3;
+  --lineslight: #e4ebfa;
+  --lineslightgrey: #f4f7fd;
+  --mainpurple: #635fc7;
+  --mainpurplehover: #a8a4ff;
+  --red: #ea5555;
+  --redhover: #ff9898;
+  --btnHeight: 4.2rem;
+  --btnWidth: 16.4rem;
+  --headerHeight: 9.7rem;
+}
+
+body {
+  background-color: var(--verydarkgrey);
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 30rem 7fr;
+}
+
+aside {
+  height: calc(100vh - 10rem);
+}

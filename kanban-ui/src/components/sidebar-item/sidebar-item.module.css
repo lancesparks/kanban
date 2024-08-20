@@ -1,0 +1,25 @@
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem 4rem;
+  width: 80%;
+  border-top-right-radius: 2.4rem;
+  border-bottom-right-radius: 2.4rem;
+  cursor: pointer;
+}
+
+.boardIcon {
+  margin-right: 2rem;
+}
+
+.sidebarItem:hover {
+  background-color: var(--mainpurple);
+}
+
+.sidebarItem:hover {
+  color: var(--white);
+}
+
+.sidebarItem:hover .boardIcon {
+  fill: var(--white);
+}

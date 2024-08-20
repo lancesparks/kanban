@@ -1,0 +1,124 @@
+.sidebarContainer {
+  color: var(--mediumgrey);
+  background-color: var(--darkgrey);
+  height: 100%;
+  display: grid;
+}
+
+.sidebarContainer * {
+  font-size: var(--headerM);
+}
+
+.sidebarContainer_header {
+  text-transform: uppercase;
+  padding: 2rem 4rem;
+}
+
+.sidebarContainer_list {
+  padding-left: 0px;
+  list-style: none;
+  display: grid;
+  row-gap: 3rem;
+}
+
+.settingsContainer {
+  display: grid;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.modeControl {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 4rem;
+  background: var(--verydarkgrey);
+  margin: 2rem 4rem;
+  border-radius: 4px;
+}
+
+.hideContainer {
+  padding: 2rem 4rem;
+}
+
+.hide {
+  display: flex;
+  align-items: center;
+}
+
+.hide > img {
+  margin-right: 2rem;
+  height: 1.8rem;
+  width: 1.6rem;
+}
+
+.switches {
+  display: flex;
+}
+.lightTheme {
+  margin-right: 2rem;
+}
+.darkTheme {
+  margin-left: 2rem;
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 4rem;
+  height: 2rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--mainpurple);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.3rem;
+  width: 1.3rem;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: var(--mainpurple);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--mainpurple);
+}
+
+input:checked + .slider:before {
+  /* -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px); */
+  transform: translateX(1.8rem);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

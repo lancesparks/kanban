@@ -1,8 +1,10 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	db "kanban.com/kanban-app/db"
 	// "github.com/gin-gonic/gin"
@@ -11,12 +13,12 @@ import (
  
 func InitRouter() *gin.Engine {
    r := gin.Default()
+   	r.Use(cors.Default())
    r.GET("/boards", getBoards)
    r.POST("/boards", createBoard)
-   r.POST("/boards/epic", createEpic)
-   r.POST("/boards/epic/story", createStory)
-   r.POST("/boards/epic/story/task", createTask)
-   r.POST("/boards/epic/story/task/subtask", createSubtask)
+   r.POST("/boards/task", createTask)
+   r.GET("/boards/task/:boardID", getTasks)
+   r.POST("/boards/task/subtask", createSubtask)
 //    r.GET("/movies/:id", getMovie)
 //    r.POST("/movies", postMovie)
 //    r.PUT("/movies/:id", putMovie)
@@ -27,6 +29,8 @@ func InitRouter() *gin.Engine {
 
 func getBoards(ctx *gin.Context) {
    res, err := db.GetBoards()
+
+   fmt.Println(res)
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
            "error": err.Error(),
@@ -37,70 +41,54 @@ func getBoards(ctx *gin.Context) {
        "boards": res,
    })
 }
+
+func getTasks(ctx *gin.Context){
+
+    var boardID = ctx.Param("boardID")
+
+    res, err := db.GetTasks(boardID)
+
+   fmt.Println(boardID)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+
+    ctx.JSON(http.StatusOK, gin.H{
+       "tasks": res,
+   })
+}
  
 func createBoard(ctx *gin.Context) {
-   var board db.Board
-   err := ctx.Bind(&board)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   res, err := db.CreateBoard(&board)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   ctx.JSON(http.StatusCreated, gin.H{
-       "boards": res,
-   })
+    var board db.Board
+
+    err := ctx.Bind(&board)
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    newBoard := db.Board{
+        Name: board.Name,
+    }
+
+    res, err := db.CreateBoard(&newBoard)
+    if err != nil {
+        ctx.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    ctx.JSON(http.StatusCreated, gin.H{
+        "board": res,
+    })
 }
 
-func createEpic(ctx *gin.Context) {
-   var epic db.Epic
-   err := ctx.Bind(&epic)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   res, err := db.CreateEpic(&epic)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   ctx.JSON(http.StatusCreated, gin.H{
-       "boards": res,
-   })
-}
-
-
-func createStory(ctx *gin.Context) {
-   var story db.Story
-   err := ctx.Bind(&story)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   res, err := db.CreateStory(&story)
-   if err != nil {
-       ctx.JSON(http.StatusBadRequest, gin.H{
-           "error": err.Error(),
-       })
-       return
-   }
-   ctx.JSON(http.StatusCreated, gin.H{
-       "boards": res,
-   })
-}
 
 
 func createTask(ctx *gin.Context) {
@@ -145,3 +133,4 @@ func createSubtask(ctx *gin.Context) {
        "boards": res,
    })
 }
+

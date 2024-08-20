@@ -1,0 +1,66 @@
+.headerContainer {
+  color: var(--white);
+  display: flex;
+  background-color: var(--darkgrey);
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--linesdark);
+}
+
+.header {
+  color: var(--white);
+  font-size: var(--headerXL);
+  border-right: var(--linesdark);
+}
+
+.containerLogo {
+  display: flex;
+  height: 9.7rem;
+  border-right: 1px solid var(--linesdark);
+  align-items: center;
+  padding: 0rem 4rem;
+  width: 30rem;
+}
+
+.containerLogo_logo {
+  height: 2.52rem;
+  width: 15.2rem;
+}
+
+.headerContainer_actions {
+  display: flex;
+  flex: 1 0;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0rem 4rem;
+}
+
+.action_container {
+  display: flex;
+  flex: 0 0 18%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ellipsis {
+  height: 65%;
+}
+
+.addBtn {
+  color: var(--white);
+  font-size: var(--headerM);
+  height: var(--btnHeight);
+  width: var(--btnWidth);
+  border-radius: 2.4rem;
+  cursor: pointer;
+  background-color: var(--mainpurple);
+  border: none;
+  box-shadow: none;
+  transition: ease-in-out 0.2s;
+}
+
+.addBtn:hover {
+  background-color: var(--mainpurplehover);
+}

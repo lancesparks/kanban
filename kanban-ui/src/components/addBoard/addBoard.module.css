@@ -1,0 +1,89 @@
+.modalContainer {
+  height: 42.9rem;
+  width: 48rem;
+  max-width: 48rem;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: var(--darkgrey);
+  color: var(--white);
+  padding: 2rem 4rem;
+}
+
+.modalForm {
+  position: relative;
+  height: 100%;
+}
+
+.boardColumn {
+  display: flex;
+  align-items: center;
+}
+
+.removeBoardColumn {
+  color: white;
+  font-size: 1.8rem;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.modalContainer,
+section {
+  margin-bottom: 2rem;
+}
+
+.modalContainer,
+h1 {
+  font-size: var(--headerL);
+  margin-bottom: 2rem;
+}
+
+.modalContainer,
+h3 {
+  font-size: var(--headerS);
+  margin-bottom: 0.5rem;
+}
+
+.modalInput {
+  width: 100%;
+
+  background-color: var(--darkgrey);
+
+  font-size: var(--headerS);
+  border: 1px solid var(--mediumgrey);
+  height: 3rem;
+  color: var(--white);
+}
+
+.modalInput:focus {
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  border-radius: 2.4rem;
+  font-size: var(--headerS);
+  padding: 1rem 0rem;
+  font-weight: bold;
+  line-height: 1.2rem;
+  box-shadow: none;
+  border: none;
+}
+
+.btnSection {
+  position: absolute;
+  width: 100%;
+  bottom: 0.05rem;
+  display: grid;
+  row-gap: 1rem;
+}
+
+.addBtn {
+  color: var(--mainpurple);
+  background-color: var(--white);
+}
+
+.saveChanges {
+  color: var(--white);
+  background-color: var(--mainpurple);
+}

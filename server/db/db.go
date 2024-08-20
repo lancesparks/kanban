@@ -16,26 +16,14 @@ var err error
 
 type Board struct {
    gorm.Model
-   Epics       []Epic `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+   Name    string `json:"name"`
+   Tasks    []Task `gorm:"foreignkey:BoardID"`
 }
 
-type Epic struct {
-   gorm.Model
-   BoardID     uint
-   Name        string `json:"name"`
-   Columns 	   []Story  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-}
-
-type Story struct {
-   gorm.Model
-   EpicID 	    uint
-   Name        string `json:"name"`
-   Tasks  	   []Task `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-}
 
 type Task struct {
    gorm.Model
-   StoryID  	uint
+   BoardID      uint `json:"boardId"`
    Title        string `json:"title"`
    Description  string `json:"description"`
    Status 		string `json:"status"`
@@ -44,10 +32,11 @@ type Task struct {
 
 type Subtask struct {
    gorm.Model
-   TaskID 		 uint
+   TaskID 		uint `json:"taskId"`
    Title        string `json:"title"`
    IsCompleted  bool `json:"isCompleted"`
 }
+
 
 
 
@@ -75,7 +64,7 @@ func InitPostgresDB() {
    if err != nil {
        log.Fatal(err)
    }
-   db.AutoMigrate(Board{},Epic{}, Story{}, Task{}, Subtask{})
+   db.AutoMigrate(Board{}, Task{}, Subtask{})
 }
 
 
@@ -85,7 +74,19 @@ func GetBoards() ([]*Board, error) {
    if res.Error != nil {
        return nil, errors.New("no boards found")
    }
+
    return board, nil
+}
+
+func GetTasks(BoardID any) ([]*Task, error) {
+    fmt.Println(BoardID)
+    var task []*Task
+    res := db.Where("board_id = ?", BoardID).Find(&task)
+    if res.Error != nil {
+        return nil, errors.New("no tasks found")
+    }
+
+    return task, nil
 }
 
 
@@ -97,22 +98,6 @@ func CreateBoard(board *Board) (*Board, error) {
    return board, nil
 }
 
-func CreateEpic(epic *Epic)(*Epic, error){
-	res := db.Create(&epic)
-   if res.Error != nil {
-       return nil, errors.New("no epics found")
-   }
-   return epic, nil
-}
-
-
-func CreateStory(story *Story)(*Story, error){
-	res := db.Create(&story)
-   if res.Error != nil {
-       return nil, errors.New("no stories found")
-   }
-   return story, nil
-}
 
 
 
