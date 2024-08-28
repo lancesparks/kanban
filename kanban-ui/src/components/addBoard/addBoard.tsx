@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 import classes from "./addBoard.module.css";
 
-const ResultModal = forwardRef(function ResultModal(props, ref: any) {
+const AddBoardModal = forwardRef(function AddBoardModal(_, ref: any) {
   const dialog = useRef<HTMLDialogElement>();
   const modal = document.getElementById("root");
 
@@ -45,4 +45,4 @@ const ResultModal = forwardRef(function ResultModal(props, ref: any) {
   );
 });
 
-export default ResultModal;
+export default AddBoardModal;

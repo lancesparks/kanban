@@ -4,7 +4,7 @@ import SideBarItem from "../sidebar-item/sidebar-item";
 import hideIcon from "../../assets/icon-hide-sidebar.svg";
 import lightTheme from "../../assets/icon-light-theme.svg";
 import darkTheme from "../../assets/icon-dark-theme.svg";
-import { Board } from "../../interfaces";
+import { IBoard } from "../../interfaces";
 
 const SideBar = ({ boardTypes, handleSelectedBoard }: any) => {
   return (
@@ -12,7 +12,7 @@ const SideBar = ({ boardTypes, handleSelectedBoard }: any) => {
       <div>
         <h2 className={classes.sidebarContainer_header}>all boards</h2>
         <ul className={classes.sidebarContainer_list}>
-          {boardTypes.map((boardType: Board) => (
+          {boardTypes.map((boardType: IBoard) => (
             <SideBarItem
               name={boardType.name}
               id={boardType.ID}

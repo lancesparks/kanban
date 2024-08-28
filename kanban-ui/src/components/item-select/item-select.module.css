@@ -1,0 +1,44 @@
+.select_container {
+  display: flex;
+  flex: 1;
+  position: relative;
+  align-items: center;
+  height: 4rem;
+}
+
+.status_container_header {
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.status_select {
+  appearance: none;
+  height: 4rem;
+  color: var(--white);
+  background-color: var(--darkgrey);
+  border: 1px solid var(--mediumgrey);
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0 2rem;
+  width: 100%;
+  margin: 0px;
+}
+
+.status_select:active ~ .chevron {
+  transform: rotate(180deg);
+}
+.chevron {
+  position: absolute;
+  right: 5%;
+  height: 1rem;
+  width: 1.5rem;
+}

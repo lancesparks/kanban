@@ -16,8 +16,9 @@ func InitRouter() *gin.Engine {
    	r.Use(cors.Default())
    r.GET("/boards", getBoards)
    r.POST("/boards", createBoard)
-   r.POST("/boards/task", createTask)
-   r.GET("/boards/task/:boardID", getTasks)
+   r.POST("/boards/tasks", createTask)
+   r.PATCH("/boards/tasks/subtask", updateSubTask)
+   r.GET("/boards/tasks/:boardID", getTasks)
    r.POST("/boards/task/subtask", createSubtask)
 //    r.GET("/movies/:id", getMovie)
 //    r.POST("/movies", postMovie)
@@ -134,3 +135,26 @@ func createSubtask(ctx *gin.Context) {
    })
 }
 
+
+
+func updateSubTask(ctx *gin.Context) {
+    fmt.Println("updating subtask")
+   var subtask db.Subtask 
+   err := ctx.Bind(&subtask)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   res, err := db.UpdateSubTask(&subtask)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusCreated, gin.H{
+       "subtasks": res,
+   })   
+}

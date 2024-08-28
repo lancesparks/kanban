@@ -1,0 +1,87 @@
+.subtask {
+  display: flex;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--verydarkgrey);
+  position: relative;
+  align-items: center;
+  align-content: center;
+}
+
+.subtask input {
+}
+
+.subtask_info {
+  color: var(--white);
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  font-weight: bold;
+}
+
+/* checkbox style  */
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.subtask_checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2rem;
+  width: 2rem;
+  background-color: var(--darkgrey);
+  transition: ease-in-out 0.25s;
+  transform: translateY(-25%);
+  border: 1px solid #828fa3;
+  border-radius: 4px;
+}
+
+.container:hover input ~ .subtask_checkbox {
+  background-color: #ccc;
+}
+
+.container input:checked ~ .subtask_checkbox {
+  background-color: var(--mainpurple);
+}
+
+.subtask_checkbox:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .subtask_checkbox:after {
+  display: block;
+}
+
+.container .subtask_checkbox:after {
+  transform: translateY(-25%);
+  justify-content: center;
+  align-items: center;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

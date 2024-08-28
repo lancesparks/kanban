@@ -1,7 +1,7 @@
 import classes from "./header.module.css";
 import logo from "../../assets/logo-light.svg";
 import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
-import AddBoard from "../addBoard/addBoard";
+import AddBoardModal from "../addBoard/addBoard";
 import { useRef } from "react";
 
 const Header = () => {
@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <header className={classes.headerContainer}>
-      <AddBoard ref={dialog} />
+      <AddBoardModal ref={dialog} />
       <div className={classes.containerLogo}>
         <img src={logo} className={classes.containerLogo_logo} alt="logo"></img>
         {/* <h1 className="containerLogo_appLogo">kanban</h1> */}

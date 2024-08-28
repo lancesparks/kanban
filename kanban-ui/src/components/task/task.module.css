@@ -1,0 +1,21 @@
+.taskContainer {
+  background-color: var(--darkgrey);
+  color: var(--white);
+  border-radius: 0.4rem;
+  width: 28rem;
+  padding: 2rem;
+  cursor: pointer;
+}
+
+.taskTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.9rem;
+}
+
+.subtasks {
+  color: var(--mediumgrey);
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+}

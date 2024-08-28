@@ -27,7 +27,7 @@ type Task struct {
    Title        string `json:"title"`
    Description  string `json:"description"`
    Status 		string `json:"status"`
-   Subtask 		[]Subtask `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+   Subtasks []*Subtask `gorm:"foreignkey:TaskID" json:"subtasks"`
 }
 
 type Subtask struct {
@@ -36,6 +36,7 @@ type Subtask struct {
    Title        string `json:"title"`
    IsCompleted  bool `json:"isCompleted"`
 }
+
 
 
 
@@ -79,15 +80,12 @@ func GetBoards() ([]*Board, error) {
 }
 
 func GetTasks(BoardID any) ([]*Task, error) {
-    fmt.Println(BoardID)
-    var task []*Task
-    res := db.Where("board_id = ?", BoardID).Find(&task)
-    if res.Error != nil {
-        return nil, errors.New("no tasks found")
-    }
+    var tasks []*Task
+    db.Where("board_id = ?", BoardID).Preload("Subtasks").Find(&tasks)
 
-    return task, nil
+    return tasks, nil
 }
+
 
 
 func CreateBoard(board *Board) (*Board, error) {
@@ -127,6 +125,18 @@ func UpdateTask(task *Task) (*Task, error) {
    return task, nil
 }
 
+
+func UpdateSubTask(subtask *Subtask) (*[]Subtask, error) {
+    var subtaskToUpdate Subtask
+    result := db.Model(&subtaskToUpdate).Where("id = ?", subtask.ID).Update("IsCompleted", subtask.IsCompleted)
+    if result.RowsAffected == 0 {
+        return nil, errors.New("subtask not updated")
+    }
+
+    var subtasks []Subtask
+    db.Model(&subtaskToUpdate).Where("task_id = ?", subtask.TaskID).Find(&subtasks)
+    return &subtasks, nil
+}
 func DeleteTask(id *string) error {
    var taskToDelete Task
    result := db.Where("id = ?", id).Delete(&taskToDelete)
@@ -153,15 +163,6 @@ func GetSubTask(id string) (*Subtask, error) {
     return nil, fmt.Errorf(fmt.Sprintf("subtask of id %s not found", id))
   }
  return &subtask, nil
-}
-
-func UpdateSubTask(subtask *Subtask) (*Subtask, error) {
-   var subtaskToUpdate Subtask
-   result := db.Model(&subtaskToUpdate).Where("id = ?", subtask.ID).Updates(subtask)
-   if result.RowsAffected == 0 {
-       return &subtaskToUpdate, errors.New("subtask not updated")
-   }
-   return subtask, nil
 }
 
 

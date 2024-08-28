@@ -1,0 +1,14 @@
+.taskColumn {
+  display: flex;
+  max-width: 28rem;
+  flex-direction: column;
+  margin-right: 5rem;
+}
+
+.columnTitle {
+  color: var(--mediumgrey);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,12 @@
+.modalContainer {
+  position: relative;
+  width: 48rem;
+  max-width: 48rem;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: var(--darkgrey);
+  color: var(--white);
+  padding: 2rem 3rem;
+  border-radius: 6px;
+}

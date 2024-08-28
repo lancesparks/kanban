@@ -4,3 +4,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.mainContainer {
+  display: flex;
+  padding: 2rem 4rem;
+}
