@@ -10,6 +10,9 @@ interface TaskDialogProps {
   subtaskStatus: any;
   currentSubTasks: ISubtask[];
   setCurrentSubTasks: any;
+  taskStatuses: string[];
+  currentStatus: string;
+  setCurrentStatus: any;
   editMode: boolean;
   handleEditMode: any;
   handleSave: any;
@@ -23,6 +26,9 @@ const TaskDialog = forwardRef(function TaskDialog(
     subtaskStatus,
     currentSubTasks,
     setCurrentSubTasks,
+    taskStatuses,
+    currentStatus,
+    setCurrentStatus,
     editMode,
     handleEditMode,
     handleSave,
@@ -50,6 +56,9 @@ const TaskDialog = forwardRef(function TaskDialog(
           <TaskInfo
             task={task}
             subtaskStatus={subtaskStatus}
+            taskStatuses={taskStatuses}
+            currentStatus={currentStatus}
+            setCurrentStatus={setCurrentStatus}
             handleEditMode={handleEditMode}
             handleSetSubTaskStatus={handleSetSubTaskStatus}
           ></TaskInfo>
@@ -59,6 +68,9 @@ const TaskDialog = forwardRef(function TaskDialog(
           <TaskEdit
             task={task}
             currentSubTasks={currentSubTasks}
+            taskStatuses={taskStatuses}
+            currentStatus={currentStatus}
+            setCurrentStatus={setCurrentStatus}
             setCurrentSubTasks={setCurrentSubTasks}
             handleEditMode={handleEditMode}
             handleSave={handleSave}

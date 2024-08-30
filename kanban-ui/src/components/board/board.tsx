@@ -5,16 +5,18 @@ import { groupBy } from "lodash";
 import Task from "../task/task";
 const Board = ({ tasks }: any) => {
   const [columns, setColumns] = useState<Record<string, ITask[]>>({});
-
+  const [taskStatuses, setTaskStatuses] = useState<string[]>([]);
   useEffect(() => {
     if (!tasks) {
       return;
     }
-
     const grouped = groupBy(tasks, "status");
     setColumns((prev: any) => {
+      //grouping the tasks based on their status
       return { ...grouped };
     });
+
+    setTaskStatuses(Object.keys(grouped));
   }, [tasks]);
 
   return (
@@ -27,7 +29,9 @@ const Board = ({ tasks }: any) => {
             </h3>
 
             {columns[key].map((task: ITask, index: number) => {
-              return <Task task={task} key={index} />;
+              return (
+                <Task key={index} task={task} taskStatuses={taskStatuses} />
+              );
             })}
           </section>
         );

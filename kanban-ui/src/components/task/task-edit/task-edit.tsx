@@ -9,6 +9,9 @@ import SubTaskEdit from "../subtask-edit/subtask-edit";
 interface TaskEditProps {
   task: ITask;
   currentSubTasks: ISubtask[];
+  taskStatuses: string[];
+  currentStatus: string;
+  setCurrentStatus: any;
   setCurrentSubTasks: any;
   handleEditMode: any;
   handleSave: any;
@@ -19,6 +22,9 @@ interface TaskEditProps {
 const TaskEdit = ({
   task,
   currentSubTasks,
+  taskStatuses,
+  currentStatus,
+  setCurrentStatus,
   setCurrentSubTasks,
   handleEditMode,
   handleSave,
@@ -94,13 +100,24 @@ const TaskEdit = ({
       </section>
       <section className={classes.taskEdi_status}>
         <h3>Status</h3>
-        <ItemSelect title="" taskStatuses={["To Do", "In Progress", "Done"]} />
+        <ItemSelect
+          title=""
+          taskStatuses={taskStatuses}
+          selected={currentStatus || "none"}
+          setCurrentStatus={setCurrentStatus}
+        />
       </section>
       <section className="buttons">
         <a
           className={`${classes.taskEdit_button} ${classes.btnControl}`}
           onClick={() =>
-            handleSave(task.ID, title, description, currentSubTasks)
+            handleSave(
+              task.ID,
+              title,
+              description,
+              currentSubTasks,
+              currentStatus
+            )
           }
         >
           Save Changes

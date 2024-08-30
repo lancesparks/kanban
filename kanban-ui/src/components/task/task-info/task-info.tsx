@@ -11,6 +11,9 @@ interface TaskInfoProps {
     count: number;
     completed: number;
   };
+  taskStatuses: string[];
+  currentStatus: string;
+  setCurrentStatus: any;
   handleEditMode: any;
   handleSetSubTaskStatus: any;
 }
@@ -18,6 +21,9 @@ interface TaskInfoProps {
 const TaskInfo = ({
   task,
   subtaskStatus,
+  taskStatuses,
+  currentStatus,
+  setCurrentStatus,
   handleEditMode,
   handleSetSubTaskStatus,
 }: TaskInfoProps) => {
@@ -69,7 +75,9 @@ const TaskInfo = ({
       <section className={classes.status_container}>
         <ItemSelect
           title={"Current Status"}
-          taskStatuses={["To Do", "In Progress", "Done"]}
+          taskStatuses={taskStatuses}
+          selected={currentStatus || "none"}
+          setCurrentStatus={setCurrentStatus}
         ></ItemSelect>
       </section>
     </div>

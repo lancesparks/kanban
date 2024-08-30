@@ -4,9 +4,10 @@ import TaskDialog from "./task-dialog/task-dialog";
 import { ISubtask, ITask } from "../../interfaces";
 import axios from "axios";
 
-const Task = ({ task }: any) => {
+const Task = ({ task, taskStatuses }: any) => {
   const dialog = useRef<HTMLDialogElement>();
   const [editMode, setEditMode] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(task.status);
   const [currentTask, setCurrentTask] = useState(task);
   const [currentSubTasks, setCurrentSubTasks] = useState(task.subtasks);
   const [subtaskStatus, setSubtaskStatus] = React.useState({
@@ -50,14 +51,17 @@ const Task = ({ task }: any) => {
     ID: number,
     title: string,
     description: string,
-    subtasks: ISubtask[]
+    subtasks: ISubtask[],
+    status: string
   ) => {
     let updatedTask: ITask = {
       ...task,
       title,
       description,
       subtasks,
+      status,
     };
+
     axios
       .post(`http://127.0.0.1:8080/boards/tasks/${ID}`, updatedTask)
       .then((response: any) => {
@@ -132,6 +136,9 @@ const Task = ({ task }: any) => {
         task={currentTask}
         subtaskStatus={subtaskStatus}
         currentSubTasks={currentSubTasks}
+        taskStatuses={taskStatuses}
+        currentStatus={currentStatus}
+        setCurrentStatus={setCurrentStatus}
         setCurrentSubTasks={setCurrentSubTasks}
         editMode={editMode}
         handleEditMode={handleEditMode}

@@ -79,6 +79,7 @@ func GetBoards() ([]*Board, error) {
    return board, nil
 }
 
+
 func GetTasks(BoardID any) ([]*Task, error) {
     var tasks []*Task
     db.Where("board_id = ?", BoardID).Preload("Subtasks").Find(&tasks)
@@ -204,4 +205,13 @@ func DeleteSubTask(subtask *Subtask) ([]Subtask, error) {
     db.Where("task_id = ?", subtask.TaskID).Find(&remainingSubtasks)
     
     return remainingSubtasks, nil
+}
+
+func GetStatus() ([]string, error) {
+    var statuses []string
+    res := db.Model(&Task{}).Group("status").Pluck("status", &statuses)
+    if res.Error != nil {
+        return nil, errors.New("no statuses found")
+    }
+    return statuses, nil
 }

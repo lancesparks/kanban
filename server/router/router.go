@@ -14,6 +14,7 @@ import (
 func InitRouter() *gin.Engine {
    r := gin.Default()
    r.Use(cors.Default())
+   r.GET("/status", getStatusTypes)
    r.GET("/boards", getBoards)
    r.POST("/boards", createBoard)
    r.POST("/boards/tasks", createTask)
@@ -43,6 +44,25 @@ func getBoards(ctx *gin.Context) {
        "boards": res,
    })
 }
+
+func getStatusTypes(ctx *gin.Context) {    
+      
+
+    res, err := db.GetStatus()
+
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+
+    ctx.JSON(http.StatusOK, gin.H{
+       "types": res,
+   })    
+
+}
+
 
 func getTasks(ctx *gin.Context){
 
