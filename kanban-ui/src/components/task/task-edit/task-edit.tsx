@@ -74,16 +74,17 @@ const TaskEdit = ({
       </section>
       <section className={classes.taskEdit_subtasks}>
         <h3>Subtasks</h3>
-        {currentSubTasks.map((subtask: any, index: any) => {
-          return (
-            <SubTaskEdit
-              key={index}
-              {...subtask}
-              updateSubTask={updateSubTasks}
-              handleDeleteSubTasks={handleDeleteSubTasks}
-            ></SubTaskEdit>
-          );
-        })}
+        {currentSubTasks?.length > 0 &&
+          currentSubTasks?.map((subtask: ISubtask) => {
+            return (
+              <SubTaskEdit
+                key={subtask.ID}
+                {...subtask}
+                updateSubTask={updateSubTasks}
+                handleDeleteSubTasks={handleDeleteSubTasks}
+              ></SubTaskEdit>
+            );
+          })}
         <a
           className={`${classes.taskEdit_button} ${classes.subtaskBtn}`}
           onClick={() => AddSubTask()}

@@ -77,6 +77,11 @@ const Task = ({ task }: any) => {
 
   const handleDeleteSubTasks = (subtaskId: number) => {
     if (!subtaskId) {
+      setCurrentSubTasks((prev: ISubtask[]) => {
+        return prev.filter((subtask: Partial<ISubtask>) => {
+          return subtask.hasOwnProperty("ID");
+        });
+      });
       return;
     }
     const subTaskToDelete: ISubtask | undefined = currentSubTasks.find(
@@ -115,8 +120,6 @@ const Task = ({ task }: any) => {
         console.log(error);
       });
   };
-
-  // setSubtaskCount(task.subtasks);
 
   return (
     <section className={classes.taskContainer} onClick={handleDialog}>

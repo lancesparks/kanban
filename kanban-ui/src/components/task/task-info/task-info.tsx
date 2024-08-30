@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classes from "./task-info.module.css";
-import { ITask } from "../../../interfaces";
+import { ISubtask, ITask } from "../../../interfaces";
 import SubTaskInfo from "../../subtask-info/subtask-info";
 import ellipsis from "../../../assets/icon-vertical-ellipsis.svg";
 import ItemSelect from "../../item-select/item-select";
@@ -52,17 +52,18 @@ const TaskInfo = ({
           <p className={classes.subTaskArea_count}>
             Subtasks ( {subtaskStatus.completed} of {subtaskStatus.count} )
           </p>
-          {subtasks.map((subtask: any, index: number) => {
-            return (
-              <div key={subtask.ID}>
-                <SubTaskInfo
-                  taskId={task.ID}
-                  handleSetSubTaskStatus={handleSetSubTaskStatus}
-                  subtask={subtask}
-                ></SubTaskInfo>
-              </div>
-            );
-          })}
+          {subtasks?.length > 0 &&
+            subtasks?.map((subtask: ISubtask) => {
+              return (
+                <div key={subtask.ID}>
+                  <SubTaskInfo
+                    taskId={task.ID}
+                    handleSetSubTaskStatus={handleSetSubTaskStatus}
+                    subtask={subtask}
+                  ></SubTaskInfo>
+                </div>
+              );
+            })}
         </div>
       </section>
       <section className={classes.status_container}>
