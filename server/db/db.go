@@ -107,7 +107,8 @@ func CreateTask(task *Task) (*Task, error) {
    return task, nil
 }
 
-func GetTask(id string) (*Task, error) {
+func GetTask(id any) (*Task, error) {
+    fmt.Println(id)
   var task Task
   res := db.First(&task, "id = ?", id)
   if res.RowsAffected == 0 {
@@ -118,7 +119,7 @@ func GetTask(id string) (*Task, error) {
 
 func UpdateTask(task *Task) (*Task, error) {
    var taskToUpdate Task
-   result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Updates(task)
+   result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
    if result.RowsAffected == 0 {
        return &taskToUpdate, errors.New("subtask not updated")
    }
@@ -128,7 +129,7 @@ func UpdateTask(task *Task) (*Task, error) {
 
 func UpdateSubTask(subtask *Subtask) (*[]Subtask, error) {
     var subtaskToUpdate Subtask
-    result := db.Model(&subtaskToUpdate).Where("id = ?", subtask.ID).Update("IsCompleted", subtask.IsCompleted)
+    result := db.Model(&subtaskToUpdate).Where("id = ?", subtask.ID).Save(subtask)
     if result.RowsAffected == 0 {
         return nil, errors.New("subtask not updated")
     }
@@ -137,6 +138,22 @@ func UpdateSubTask(subtask *Subtask) (*[]Subtask, error) {
     db.Model(&subtaskToUpdate).Where("task_id = ?", subtask.TaskID).Find(&subtasks)
     return &subtasks, nil
 }
+
+
+func UpdateSubTasks(subtasks []Subtask) (*[]Subtask, error) {
+    var updatedSubtasks []Subtask
+    for _, subtask := range subtasks {
+        result := db.Model(&Subtask{}).Where("id = ?", subtask.ID).Save(subtask)
+        if result.RowsAffected == 0 {
+            return nil, errors.New("subtask not updated")
+        }
+        updatedSubtasks = append(updatedSubtasks, subtask)
+    }
+    return &updatedSubtasks, nil
+}
+
+
+
 func DeleteTask(id *string) error {
    var taskToDelete Task
    result := db.Where("id = ?", id).Delete(&taskToDelete)
@@ -156,7 +173,7 @@ func CreateSubtask(subtask *Subtask) (*Subtask, error)  {
 }
 
 
-func GetSubTask(id string) (*Subtask, error) {
+func GetSubTask(id any) (*Subtask, error) {
   var subtask Subtask
   res := db.First(&subtask, "id = ?", id)
   if res.RowsAffected == 0 {
@@ -165,12 +182,26 @@ func GetSubTask(id string) (*Subtask, error) {
  return &subtask, nil
 }
 
+func GetSubTasks(id string) (*[]Subtask, error) {
+  var subtasks []Subtask
+  res := db.Where("task_id = ?", id).Find(&subtasks)
+//   res := db.First(&subtask, "id = ?", id)
+  if res.RowsAffected == 0 {
+    return nil, fmt.Errorf(fmt.Sprintf("subtask of id %s not found", id))
+  }
+ return &subtasks, nil
+}
 
-func DeleteSubTask(id *string) error {
-   var subtaskToDelete Subtask
-   result := db.Where("id = ?", id).Delete(&subtaskToDelete)
-   if result.RowsAffected == 0 {
-       return errors.New("subtask not deleted")
-   }
-   return nil
+
+
+func DeleteSubTask(subtask *Subtask) ([]Subtask, error) {
+    result := db.Where("id = ?", subtask.ID).Delete(&subtask)
+    if result.RowsAffected == 0 {
+        return nil, errors.New("subtask not deleted")
+    }
+    
+    var remainingSubtasks []Subtask
+    db.Where("task_id = ?", subtask.TaskID).Find(&remainingSubtasks)
+    
+    return remainingSubtasks, nil
 }

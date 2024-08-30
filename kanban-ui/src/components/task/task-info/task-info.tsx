@@ -1,18 +1,9 @@
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { useState } from "react";
 import classes from "./task-info.module.css";
-import { createPortal } from "react-dom";
-import { ITask } from "../../interfaces";
-import SubTaskInfo from "../subtask-info/subtask-info";
-import chevronDown from "../../assets/icon-chevron-down.svg";
-import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
-import ItemSelect from "../item-select/item-select";
+import { ITask } from "../../../interfaces";
+import SubTaskInfo from "../../subtask-info/subtask-info";
+import ellipsis from "../../../assets/icon-vertical-ellipsis.svg";
+import ItemSelect from "../../item-select/item-select";
 
 interface TaskInfoProps {
   task: ITask;
@@ -20,23 +11,18 @@ interface TaskInfoProps {
     count: number;
     completed: number;
   };
-  editTask: boolean;
-  setEditTask: any;
+  handleEditMode: any;
   handleSetSubTaskStatus: any;
 }
 
-const TaskInfo = (
-  {
-    task,
-    subtaskStatus,
-    editTask,
-    setEditTask,
-    handleSetSubTaskStatus,
-  }: TaskInfoProps,
-  ref: any
-) => {
+const TaskInfo = ({
+  task,
+  subtaskStatus,
+  handleEditMode,
+  handleSetSubTaskStatus,
+}: TaskInfoProps) => {
   const [showEditTaskMenu, setShowEditTaskMenu] = useState(false);
-  const subtasks = task.subtasks;
+  const subtasks = task.subtasks.sort((a, b) => a.ID - b.ID);
 
   return (
     // @ts-ignore
@@ -55,7 +41,7 @@ const TaskInfo = (
         {showEditTaskMenu && (
           <div
             className={classes.taskEdit_menu}
-            onClick={() => setEditTask(!editTask)}
+            onClick={() => handleEditMode()}
           >
             <p>Edit Task</p>
           </div>
@@ -68,12 +54,13 @@ const TaskInfo = (
           </p>
           {subtasks.map((subtask: any, index: number) => {
             return (
-              <SubTaskInfo
-                key={index}
-                taskId={task.ID}
-                handleSetSubTaskStatus={handleSetSubTaskStatus}
-                subtask={subtask}
-              ></SubTaskInfo>
+              <div key={subtask.ID}>
+                <SubTaskInfo
+                  taskId={task.ID}
+                  handleSetSubTaskStatus={handleSetSubTaskStatus}
+                  subtask={subtask}
+                ></SubTaskInfo>
+              </div>
             );
           })}
         </div>

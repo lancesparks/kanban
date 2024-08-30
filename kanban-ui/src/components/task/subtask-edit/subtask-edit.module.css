@@ -1,0 +1,33 @@
+.taskEdit_input {
+  appearance: none;
+  color: var(--white);
+  background-color: var(--darkgrey);
+  border: 1px solid var(--mediumgrey);
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  margin: 0px;
+}
+
+.subtaskInput {
+  margin-bottom: 0.5rem;
+}
+
+.taskEdit_subtaskContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cross {
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  cursor: pointer;
+}

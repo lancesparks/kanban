@@ -15,8 +15,9 @@
 }
 
 .taskEdit_button {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  text-align: center;
   padding: 1rem;
   border-radius: 50px;
   border: none;
@@ -26,12 +27,7 @@
   line-height: 1.5rem;
   margin-bottom: 1rem;
   cursor: pointer;
-}
-
-.taskEdit_subtaskContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  transition: background-color 0.3s;
 }
 
 .subtaskBtn {
@@ -43,6 +39,10 @@
   background-color: var(--mainpurple);
   color: var(--white);
   margin-bottom: 1rem;
+}
+
+.btnControl:hover {
+  background-color: var(--mainpurple);
 }
 
 .taskEdit_input {
@@ -62,10 +62,6 @@
   margin: 0px;
 }
 
-.subtaskInput {
-  margin-bottom: 1rem;
-}
-
 h3 {
   color: var(--white);
   font-size: 1.2rem;
@@ -76,18 +72,10 @@ h3 {
 
 input {
   height: 4rem;
-  padding: 0rem 2rem;
+  padding: 0rem 1rem;
 }
 
 textarea {
-  padding: 0.5rem 2rem;
+  padding: 1rem;
   resize: none;
-}
-
-.cross {
-  height: 1.5rem;
-  width: 1.5rem;
-  margin-bottom: 1rem;
-  margin-left: 2rem;
-  cursor: pointer;
 }

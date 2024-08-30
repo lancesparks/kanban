@@ -13,17 +13,18 @@ import (
  
 func InitRouter() *gin.Engine {
    r := gin.Default()
-   	r.Use(cors.Default())
+   r.Use(cors.Default())
    r.GET("/boards", getBoards)
    r.POST("/boards", createBoard)
    r.POST("/boards/tasks", createTask)
+   r.POST("/boards/tasks/:id", updateTask)
    r.PATCH("/boards/tasks/subtask", updateSubTask)
    r.GET("/boards/tasks/:boardID", getTasks)
-   r.POST("/boards/task/subtask", createSubtask)
+   r.POST("/boards/tasks/subtask", createSubtask)
 //    r.GET("/movies/:id", getMovie)
 //    r.POST("/movies", postMovie)
 //    r.PUT("/movies/:id", putMovie)
-//    r.DELETE("/movies/:id", deleteMovie)
+   r.DELETE("/boards/tasks/subtask/", deleteSubtask)
    return r
 }
 
@@ -113,7 +114,6 @@ func createTask(ctx *gin.Context) {
    })
 }
 
-
 func createSubtask(ctx *gin.Context) {
    var subtask db.Subtask
    err := ctx.Bind(&subtask)
@@ -135,6 +135,28 @@ func createSubtask(ctx *gin.Context) {
    })
 }
 
+func updateTask(ctx *gin.Context) {
+  fmt.Println("updating subtask")
+   var task db.Task 
+   err := ctx.Bind(&task)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   
+   res, err := db.UpdateTask(&task)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusCreated, gin.H{
+       "task": res,
+   })   
+}
 
 
 func updateSubTask(ctx *gin.Context) {
@@ -155,6 +177,28 @@ func updateSubTask(ctx *gin.Context) {
        return
    }
    ctx.JSON(http.StatusCreated, gin.H{
+       "subtasks": res,
+   })   
+}
+
+func deleteSubtask(ctx *gin.Context) {
+  fmt.Println("deleting subtask")
+   var subtask db.Subtask 
+   err := ctx.Bind(&subtask)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   res, err2 := db.DeleteSubTask(&subtask)
+   if err2 != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err2.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusAccepted, gin.H{
        "subtasks": res,
    })   
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import classes from "./subtask-info.module.css";
 import axios from "axios";
 
-const SubTaskInfo = ({ handleSetSubTaskStatus, taskId, subtask }: any) => {
+const SubTaskInfo = ({ taskId, handleSetSubTaskStatus, subtask }: any) => {
   return (
     <section className={classes.subtask}>
       <label className={classes.container}>

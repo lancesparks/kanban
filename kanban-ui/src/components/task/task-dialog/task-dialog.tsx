@@ -1,32 +1,36 @@
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import classes from "./task-dialog.module.css";
 import { createPortal } from "react-dom";
-import { ITask } from "../../interfaces";
-import SubTaskInfo from "../subtask-info/subtask-info";
-import chevronDown from "../../assets/icon-chevron-down.svg";
-import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
+import { ISubtask, ITask } from "../../../interfaces";
 import TaskInfo from "../task-info/task-info";
 import TaskEdit from "../task-edit/task-edit";
 
 interface TaskDialogProps {
   task: ITask;
   subtaskStatus: any;
+  currentSubTasks: ISubtask[];
+  setCurrentSubTasks: any;
+  editMode: boolean;
+  handleEditMode: any;
+  handleSave: any;
+  handleDeleteSubTasks: any;
   handleSetSubTaskStatus: any;
 }
 
 const TaskDialog = forwardRef(function TaskDialog(
-  { task, subtaskStatus, handleSetSubTaskStatus }: TaskDialogProps,
+  {
+    task,
+    subtaskStatus,
+    currentSubTasks,
+    setCurrentSubTasks,
+    editMode,
+    handleEditMode,
+    handleSave,
+    handleDeleteSubTasks,
+    handleSetSubTaskStatus,
+  }: TaskDialogProps,
   ref: any
 ) {
-  const [editTask, setEditTask] = useState(false);
-
   const dialog = useRef<HTMLDialogElement>();
   const modal = document.getElementById("root");
 
@@ -42,22 +46,24 @@ const TaskDialog = forwardRef(function TaskDialog(
     // @ts-ignore
     <dialog ref={dialog} className={`modal ${classes.modalContainer}`}>
       <form className={classes.taskForm} method="dialog">
-        {!editTask && (
+        {!editMode && (
           <TaskInfo
             task={task}
-            editTask={editTask}
-            setEditTask={setEditTask}
             subtaskStatus={subtaskStatus}
+            handleEditMode={handleEditMode}
             handleSetSubTaskStatus={handleSetSubTaskStatus}
           ></TaskInfo>
         )}
 
-        {editTask && (
+        {editMode && (
           <TaskEdit
             task={task}
-            editTask={editTask}
-            setEditTask={setEditTask}
-            subtaskStatus={subtaskStatus}
+            currentSubTasks={currentSubTasks}
+            setCurrentSubTasks={setCurrentSubTasks}
+            handleEditMode={handleEditMode}
+            handleSave={handleSave}
+            handleDeleteSubTasks={handleDeleteSubTasks}
+            handleSetSubTaskStatus={handleSetSubTaskStatus}
           ></TaskEdit>
         )}
       </form>

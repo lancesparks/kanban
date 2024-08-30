@@ -34,13 +34,7 @@ function App() {
       .then((response: any) => {
         setTasks(() => {
           return response.data.tasks.map((task: ITask) => {
-            return {
-              ID: task.ID,
-              title: task.title,
-              description: task.description,
-              status: task.status,
-              subtasks: task.subtasks,
-            };
+            return task;
           });
         });
       })
