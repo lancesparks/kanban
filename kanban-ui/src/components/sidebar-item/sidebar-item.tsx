@@ -9,7 +9,6 @@ const SideBarItem = ({ name, id, handleSelectedBoard }: any) => {
         className={classes.sidebarItem}
         onClick={() => handleSelectedBoard(id)}
       >
-        {" "}
         <span>
           <img src={boardIcon} className={classes.boardIcon} alt="board icon" />
         </span>

@@ -7,15 +7,19 @@ import axios from "axios";
 
 interface SubTaskEditProps {
   ID: number;
+  taskID: number;
   title: string;
-  updateSubTask: any;
+  isCompleted: boolean;
+  handleUpdateSubTasks: any;
   handleDeleteSubTasks: any;
 }
 
 const SubTaskEdit = ({
   ID,
+  taskID,
   title,
-  updateSubTask,
+  isCompleted,
+  handleUpdateSubTasks,
   handleDeleteSubTasks,
 }: SubTaskEditProps) => {
   return (
@@ -24,7 +28,7 @@ const SubTaskEdit = ({
         className={`${classes.taskEdit_input} ${classes.subtaskInput}`}
         type="text"
         value={title}
-        onChange={(e) => updateSubTask(e.target.value, ID)}
+        onChange={(e) => handleUpdateSubTasks(e.target.value, ID)}
       />
       <img
         src={cross}

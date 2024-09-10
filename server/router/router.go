@@ -17,6 +17,8 @@ func InitRouter() *gin.Engine {
    r.GET("/status", getStatusTypes)
    r.GET("/boards", getBoards)
    r.POST("/boards", createBoard)
+   r.POST("/columns", createColumn)
+   r.GET("/columns/:id", getColumns)
    r.POST("/boards/tasks", createTask)
    r.POST("/boards/tasks/:id", updateTask)
    r.PATCH("/boards/tasks/subtask", updateSubTask)
@@ -33,7 +35,7 @@ func InitRouter() *gin.Engine {
 func getBoards(ctx *gin.Context) {
    res, err := db.GetBoards()
 
-   fmt.Println(res)
+
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
            "error": err.Error(),
@@ -44,6 +46,25 @@ func getBoards(ctx *gin.Context) {
        "boards": res,
    })
 }
+
+func getColumns(ctx *gin.Context) {
+
+   
+  var boardID = ctx.Param("id")
+
+   res, err := db.GetColumns(boardID)
+
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusOK, gin.H{
+       "columns": res,
+   })
+}
+
 
 func getStatusTypes(ctx *gin.Context) {    
       
@@ -94,9 +115,7 @@ func createBoard(ctx *gin.Context) {
         return
     }
 
-    newBoard := db.Board{
-        Name: board.Name,
-    }
+    newBoard := board
 
     res, err := db.CreateBoard(&newBoard)
     if err != nil {
@@ -108,6 +127,34 @@ func createBoard(ctx *gin.Context) {
 
     ctx.JSON(http.StatusCreated, gin.H{
         "board": res,
+    })
+}
+
+
+
+func createColumn(ctx *gin.Context) {
+    var column db.Column
+
+    err := ctx.Bind(&column)
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    newColumn := column
+
+    res, err := db.CreateColumn(&newColumn)
+    if err != nil {
+        ctx.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    ctx.JSON(http.StatusCreated, gin.H{
+        "column": res,
     })
 }
 

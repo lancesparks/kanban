@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classes from "./task.module.css";
 import TaskDialog from "./task-dialog/task-dialog";
-import { ISubtask, ITask } from "../../interfaces";
-import axios from "axios";
+import { ISubtask } from "../../interfaces";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../state/store";
+import { taskActions } from "../../state/taskSlice";
 
-const Task = ({ task, taskStatuses }: any) => {
+const Task = ({ task }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
+  // const tasks = useSelector(({ tasks }: any) => tasks.tasks);
   const [editMode, setEditMode] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(task.status);
   const [currentTask, setCurrentTask] = useState(task);
-  const [currentSubTasks, setCurrentSubTasks] = useState(task.subtasks);
-  const [subtaskStatus, setSubtaskStatus] = React.useState({
+  const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,
     completed: 0,
   });
@@ -18,111 +20,30 @@ const Task = ({ task, taskStatuses }: any) => {
   const handleDialog = (e: any) => {
     if (dialog.current) {
       // @ts-ignore
+
       dialog.current.open();
+      dispatch(taskActions.selectedTask(task));
     }
   };
-
-  useEffect(() => {
-    setSubtaskCount(currentSubTasks);
-  }, [currentSubTasks]);
-
   const handleEditMode = () => {
     setEditMode((prev) => !prev);
   };
-  const setSubtaskCount = (subtasks: ISubtask[]) => {
-    if (subtasks?.length === 0) {
-      setSubtaskStatus({ count: 0, completed: 0 });
-      return;
-    }
 
-    const count = subtasks.length;
-    const completed = subtasks.filter(
-      (subtask: any) => subtask.isCompleted
-    ).length;
-    setSubtaskStatus((prev) => {
+  useEffect(() => {
+    handleSetSubtaskStatus();
+  }, [task]);
+
+  const handleSetSubtaskStatus = () => {
+    setSubtaskStatus((prev: any) => {
       return {
-        count,
-        completed,
+        count: task.subtasks.length,
+        completed:
+          task.subtasks.length > 0
+            ? task.subtasks.filter((subtask: ISubtask) => subtask.isCompleted)
+                .length
+            : 0,
       };
     });
-  };
-
-  const handleSave = (
-    ID: number,
-    title: string,
-    description: string,
-    subtasks: ISubtask[],
-    status: string
-  ) => {
-    let updatedTask: ITask = {
-      ...task,
-      title,
-      description,
-      subtasks,
-      status,
-    };
-
-    axios
-      .post(`http://127.0.0.1:8080/boards/tasks/${ID}`, updatedTask)
-      .then((response: any) => {
-        if (response.statusText.toLowerCase() === "created") {
-          setCurrentTask((prev: any) => {
-            return { ...response.data.task };
-          });
-          setCurrentSubTasks(response.data.task.subtasks);
-          setSubtaskCount(response.data.task.subtasks);
-          handleEditMode();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleDeleteSubTasks = (subtaskId: number) => {
-    if (!subtaskId) {
-      setCurrentSubTasks((prev: ISubtask[]) => {
-        return prev.filter((subtask: Partial<ISubtask>) => {
-          return subtask.hasOwnProperty("ID");
-        });
-      });
-      return;
-    }
-    const subTaskToDelete: ISubtask | undefined = currentSubTasks.find(
-      (subtask: any) => subtask.ID === subtaskId
-    );
-    if (subTaskToDelete) {
-      axios
-        .delete(`http://127.0.0.1:8080/boards/tasks/subtask/`, {
-          data: subTaskToDelete,
-        })
-        .then((response: any) => {
-          const updatedTask = { ...task, subtasks: response.data.subtasks };
-          setCurrentTask(updatedTask);
-          setCurrentSubTasks(response.data.subtasks);
-          setSubtaskCount(response.data.subtasks);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
-
-  const handleSetSubTaskStatus = (subtask: ISubtask) => {
-    axios
-      .patch(`http://127.0.0.1:8080/boards/tasks/subtask`, {
-        id: subtask.ID,
-        taskID: subtask.taskId,
-        isCompleted: subtask.isCompleted,
-        title: subtask.title,
-      })
-      .then((response: any) => {
-        setSubtaskCount(response.data.subtasks);
-        setCurrentTask({ ...currentTask, subtasks: response.data.subtasks });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   return (
@@ -133,18 +54,8 @@ const Task = ({ task, taskStatuses }: any) => {
       </p>
       <TaskDialog
         ref={dialog}
-        task={currentTask}
-        subtaskStatus={subtaskStatus}
-        currentSubTasks={currentSubTasks}
-        taskStatuses={taskStatuses}
-        currentStatus={currentStatus}
-        setCurrentStatus={setCurrentStatus}
-        setCurrentSubTasks={setCurrentSubTasks}
         editMode={editMode}
         handleEditMode={handleEditMode}
-        handleSave={handleSave}
-        handleDeleteSubTasks={handleDeleteSubTasks}
-        handleSetSubTaskStatus={handleSetSubTaskStatus}
       ></TaskDialog>
     </section>
   );

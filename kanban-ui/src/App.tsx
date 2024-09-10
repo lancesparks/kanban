@@ -4,43 +4,25 @@ import "./App.css";
 import Header from "./components/header/header";
 import Sidebar from "./components/sidebar/sidebar";
 import Board from "./components/board/board";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "./state/store";
+
+import { getAllBoards, getBoardColumns } from "./state/board-action";
+
 function App() {
-  const [boards, setBoards] = useState([]);
+  // const [boards, setBoards] = useState([]);
   const [selectedBoardID, setSelectedBoardID] = useState(1);
-  const [tasks, setTasks] = useState([]);
+  // const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const tasks = useSelector(({ tasks }: any) => tasks.tasks);
+  const boards = useSelector(({ boards }: any) => boards.boards);
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8080/boards")
-      .then((response: any) => {
-        setBoards(() => {
-          return response.data.boards.map((board: IBoard) => {
-            return { ID: board.ID, name: board.name };
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [boards.length]);
+    dispatch(getAllBoards());
+  }, []);
 
   useEffect(() => {
-    if (!selectedBoardID) {
-      return;
-    }
-    axios
-      .get(`http://127.0.0.1:8080/boards/tasks/${selectedBoardID}`)
-      .then((response: any) => {
-        setTasks(() => {
-          return response.data.tasks.map((task: ITask) => {
-            return task;
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(getBoardColumns(selectedBoardID));
   }, [selectedBoardID]);
 
   const handleSelectedBoard = (boardId: any) => {
@@ -58,9 +40,9 @@ function App() {
           ></Sidebar>
         </aside>
         <div className="mainContainer">
-          {boards.map((board: IBoard) => {
+          {boards?.map((board: IBoard) => {
             if (board.ID === selectedBoardID) {
-              return <Board key={board.ID} boardID={board.ID} tasks={tasks} />;
+              return <Board key={board.ID} />;
             }
           })}
         </div>

@@ -15,24 +15,31 @@ var db *gorm.DB
 var err error
 
 type Board struct {
+    gorm.Model
+    Name    string `json:"name"`
+    Columns []Column `json:"columns" gorm:"foreignKey:BoardID"`
+}
+
+type Column struct {
    gorm.Model
-   Name    string `json:"name"`
-   Tasks    []Task `gorm:"foreignkey:BoardID"`
+   Title string `json:"title"`
+   Tasks []Task `json:"tasks" gorm:"foreignKey:ColumnID"`
+   BoardID int `json:"board_id" gorm:"foreignKey:BoardID"`
+
 }
 
 
 type Task struct {
    gorm.Model
-   BoardID      uint `json:"boardId"`
    Title        string `json:"title"`
    Description  string `json:"description"`
-   Status 		string `json:"status"`
-   Subtasks []*Subtask `gorm:"foreignkey:TaskID" json:"subtasks"`
+   ColumnID 	int `json:"column_id" gorm:"foreignKey:ColumnID"`
+   Subtasks 	[]Subtask `json:"subtasks" gorm:"foreignKey:TaskID"`
 }
 
 type Subtask struct {
    gorm.Model
-   TaskID 		uint `json:"taskId"`
+   TaskID 		int `json:"task_id" gorm:"foreignKey:TaskID"`
    Title        string `json:"title"`
    IsCompleted  bool `json:"isCompleted"`
 }
@@ -65,18 +72,14 @@ func InitPostgresDB() {
    if err != nil {
        log.Fatal(err)
    }
-   db.AutoMigrate(Board{}, Task{}, Subtask{})
+   db.AutoMigrate(Board{}, Column{}, Task{}, Subtask{})
 }
 
 
 func GetBoards() ([]*Board, error) {
    var board []*Board
-   res := db.Find(&board)
-   if res.Error != nil {
-       return nil, errors.New("no boards found")
-   }
-
-   return board, nil
+   err := db.Model(&Board{}).Preload("Columns").Find(&board).Error
+   return board, err
 }
 
 
@@ -88,14 +91,38 @@ func GetTasks(BoardID any) ([]*Task, error) {
 }
 
 
+func GetColumns(BoardID any) ([]*Column, error) {
+    var columns []*Column
+
+     err := db.Model(&Column{}).
+        Preload("Tasks").
+        Preload("Tasks.Subtasks").
+        Find(&columns).Error
+
+    // db.Where("board_id = ?", BoardID).Preload("Tasks").Find(&columns)
+
+    return columns, err
+}
+
+
 
 func CreateBoard(board *Board) (*Board, error) {
+    fmt.Println(board)
    res := db.Create(&board)
    if res.Error != nil {
        return nil, errors.New("no boards found")
    }
    return board, nil
 }
+
+func CreateColumn(column *Column) (*Column, error) {
+   res := db.Create(&column)
+   if res.Error != nil {
+       return nil, errors.New("no boards found")
+   }
+   return column, nil
+}
+
 
 
 

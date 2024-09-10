@@ -1,19 +1,41 @@
 import classes from "./item-select.module.css";
 import chevronDown from "../../assets/icon-chevron-down.svg";
+import { useState } from "react";
+import { ITask } from "../../interfaces";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTask } from "../../state/task-action";
+import { AppDispatch } from "../../state/store";
 
 interface ItemSelectProps {
   title: string;
-  taskStatuses: any;
-  selected: string;
-  setCurrentStatus: any;
+  task: ITask;
+  isEditMode: boolean;
+  statusChanged?: any | null;
 }
 
 const ItemSelect = ({
   title,
-  taskStatuses,
-  selected,
-  setCurrentStatus,
+  task,
+  isEditMode = false,
+  statusChanged = null,
 }: ItemSelectProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const taskStatuses =
+    useSelector(({ boards }: any) =>
+      boards.columns.map((status: string) => status.toUpperCase())
+    ) || [];
+  const [selected, setSelected] = useState(task.status);
+  const setCurrentStatus = (e: any) => {
+    setSelected(e);
+    dispatch(updateTask({ ...task, status: e }));
+  };
+
+  const handleStatusChange = (e: string) => {
+    statusChanged(e);
+    setSelected(e);
+  };
+
   return (
     // @ts-ignore
     <>
@@ -21,8 +43,12 @@ const ItemSelect = ({
       <span className={classes.select_container}>
         <select
           className={classes.status_select}
-          value={selected}
-          onChange={(e) => setCurrentStatus(e.target.value)}
+          value={selected!}
+          onChange={(e) =>
+            !isEditMode
+              ? setCurrentStatus(e.target.value)
+              : handleStatusChange(e.target.value)
+          }
         >
           {taskStatuses.map((status: string, index: number) => (
             <option key={index} value={status}>

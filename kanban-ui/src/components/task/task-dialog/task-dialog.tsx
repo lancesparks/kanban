@@ -4,37 +4,15 @@ import { createPortal } from "react-dom";
 import { ISubtask, ITask } from "../../../interfaces";
 import TaskInfo from "../task-info/task-info";
 import TaskEdit from "../task-edit/task-edit";
+import { useSelector } from "react-redux";
 
 interface TaskDialogProps {
-  task: ITask;
-  subtaskStatus: any;
-  currentSubTasks: ISubtask[];
-  setCurrentSubTasks: any;
-  taskStatuses: string[];
-  currentStatus: string;
-  setCurrentStatus: any;
-  editMode: boolean;
+  editMode: any;
   handleEditMode: any;
-  handleSave: any;
-  handleDeleteSubTasks: any;
-  handleSetSubTaskStatus: any;
 }
 
 const TaskDialog = forwardRef(function TaskDialog(
-  {
-    task,
-    subtaskStatus,
-    currentSubTasks,
-    setCurrentSubTasks,
-    taskStatuses,
-    currentStatus,
-    setCurrentStatus,
-    editMode,
-    handleEditMode,
-    handleSave,
-    handleDeleteSubTasks,
-    handleSetSubTaskStatus,
-  }: TaskDialogProps,
+  { editMode, handleEditMode }: TaskDialogProps,
   ref: any
 ) {
   const dialog = useRef<HTMLDialogElement>();
@@ -54,28 +32,15 @@ const TaskDialog = forwardRef(function TaskDialog(
       <form className={classes.taskForm} method="dialog">
         {!editMode && (
           <TaskInfo
-            task={task}
-            subtaskStatus={subtaskStatus}
-            taskStatuses={taskStatuses}
-            currentStatus={currentStatus}
-            setCurrentStatus={setCurrentStatus}
+            editMode={editMode}
             handleEditMode={handleEditMode}
-            handleSetSubTaskStatus={handleSetSubTaskStatus}
           ></TaskInfo>
         )}
 
         {editMode && (
           <TaskEdit
-            task={task}
-            currentSubTasks={currentSubTasks}
-            taskStatuses={taskStatuses}
-            currentStatus={currentStatus}
-            setCurrentStatus={setCurrentStatus}
-            setCurrentSubTasks={setCurrentSubTasks}
+            editMode={editMode}
             handleEditMode={handleEditMode}
-            handleSave={handleSave}
-            handleDeleteSubTasks={handleDeleteSubTasks}
-            handleSetSubTaskStatus={handleSetSubTaskStatus}
           ></TaskEdit>
         )}
       </form>
