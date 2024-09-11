@@ -4,7 +4,7 @@ import classes from "./task-edit.module.css";
 import ItemSelect from "../../item-select/item-select";
 import SubTaskEdit from "../subtask-edit/subtask-edit";
 import { useSelector, useDispatch } from "react-redux";
-import { updateTask } from "../../../state/task-action";
+import { updateTask } from "../../../state/board-action";
 import { AppDispatch } from "../../../state/store";
 interface TaskEditProps {
   editMode: any;
@@ -13,7 +13,7 @@ interface TaskEditProps {
 
 const TaskEdit = ({ editMode, handleEditMode }: TaskEditProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const task = useSelector(({ tasks }: any) => tasks.selectedTask);
+  const task = useSelector(({ boards }: any) => boards.selectedTask);
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
 
   const handleSetTitle = (e: any) => {
@@ -128,7 +128,7 @@ const TaskEdit = ({ editMode, handleEditMode }: TaskEditProps) => {
               <SubTaskEdit
                 key={subtask.ID}
                 ID={subtask.ID}
-                taskID={subtask.taskId}
+                task_id={subtask.task_id}
                 title={subtask.title}
                 isCompleted={subtask.isCompleted}
                 handleUpdateSubTasks={handleUpdateSubTasks}

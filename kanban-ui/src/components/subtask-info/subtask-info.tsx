@@ -3,10 +3,11 @@ import classes from "./subtask-info.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../state/store";
-import { updateSubTask } from "../../state/taskSlice";
-const SubTaskInfo = ({ taskId, subtask }: any) => {
+import { updateSubTask } from "../../state/board-action";
+const SubTaskInfo = ({ task_id, subtask }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const handleSetSubTaskStatus = (subtask: any) => {
+    console.log(subtask);
     dispatch(updateSubTask(subtask));
   };
 

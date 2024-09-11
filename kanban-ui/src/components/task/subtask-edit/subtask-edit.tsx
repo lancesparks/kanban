@@ -7,7 +7,7 @@ import axios from "axios";
 
 interface SubTaskEditProps {
   ID: number;
-  taskID: number;
+  task_id: number;
   title: string;
   isCompleted: boolean;
   handleUpdateSubTasks: any;
@@ -16,7 +16,7 @@ interface SubTaskEditProps {
 
 const SubTaskEdit = ({
   ID,
-  taskID,
+  task_id,
   title,
   isCompleted,
   handleUpdateSubTasks,

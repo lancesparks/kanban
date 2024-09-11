@@ -3,7 +3,7 @@ import chevronDown from "../../assets/icon-chevron-down.svg";
 import { useState } from "react";
 import { ITask } from "../../interfaces";
 import { useSelector, useDispatch } from "react-redux";
-import { updateTask } from "../../state/task-action";
+import { updateTask } from "../../state/board-action";
 import { AppDispatch } from "../../state/store";
 
 interface ItemSelectProps {
@@ -23,7 +23,7 @@ const ItemSelect = ({
 
   const taskStatuses =
     useSelector(({ boards }: any) =>
-      boards.columns.map((status: string) => status.toUpperCase())
+      boards.boardStatuses.map((status: string) => status.toUpperCase())
     ) || [];
   const [selected, setSelected] = useState(task.status);
   const setCurrentStatus = (e: any) => {

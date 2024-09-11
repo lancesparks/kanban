@@ -12,7 +12,7 @@ interface TaskInfoProps {
 }
 
 const TaskInfo = ({ editMode, handleEditMode }: TaskInfoProps) => {
-  const task = useSelector(({ tasks }: any) => tasks.selectedTask);
+  const task = useSelector(({ boards }: any) => boards.selectedTask);
   const [showEditTaskMenu, setShowEditTaskMenu] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,

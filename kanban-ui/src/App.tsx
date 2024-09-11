@@ -10,16 +10,14 @@ import { AppDispatch } from "./state/store";
 import { getAllBoards, getBoardColumns } from "./state/board-action";
 
 function App() {
-  // const [boards, setBoards] = useState([]);
   const [selectedBoardID, setSelectedBoardID] = useState(1);
-  // const [tasks, setTasks] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
-  const tasks = useSelector(({ tasks }: any) => tasks.tasks);
+  const columns = useSelector(({ boards }: any) => boards.columns);
   const boards = useSelector(({ boards }: any) => boards.boards);
 
   useEffect(() => {
     dispatch(getAllBoards());
-  }, []);
+  }, [columns]);
 
   useEffect(() => {
     dispatch(getBoardColumns(selectedBoardID));

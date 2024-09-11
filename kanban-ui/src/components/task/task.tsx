@@ -4,12 +4,11 @@ import TaskDialog from "./task-dialog/task-dialog";
 import { ISubtask } from "../../interfaces";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../state/store";
-import { taskActions } from "../../state/taskSlice";
+import { boardActions } from "../../state/boardSlice";
 
 const Task = ({ task }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
-  // const tasks = useSelector(({ tasks }: any) => tasks.tasks);
   const [editMode, setEditMode] = useState(false);
   const [currentTask, setCurrentTask] = useState(task);
   const [subtaskStatus, setSubtaskStatus] = useState({
@@ -22,7 +21,7 @@ const Task = ({ task }: any) => {
       // @ts-ignore
 
       dialog.current.open();
-      dispatch(taskActions.selectedTask(task));
+      dispatch(boardActions.selectedTask(task));
     }
   };
   const handleEditMode = () => {
