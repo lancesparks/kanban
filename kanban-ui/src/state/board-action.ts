@@ -39,7 +39,13 @@ export const getBoardColumns = (boardId: number) => {
 
     try {
       const columns = await fetchData();
-      const columnTitles = columns.map((col: any) => col.title);
+      const columnTitles = columns.map((col: any) => {
+        return {
+          ID: col.ID,
+          status: col.title.toUpperCase(),
+        };
+      });
+
       const tasks = [...columns.map((tasks: any) => [...tasks.tasks])].flat();
       dispatch(boardActions.addTasks(tasks));
       dispatch(boardActions.addColumns(columns));
@@ -76,6 +82,7 @@ export const getAllTasks = (selectedBoardID: number) => {
 };
 
 export const updateTask = (updatedTask: ITask) => {
+  console.log(updatedTask);
   return async (dispatch: any) => {
     const fetchData = async () => {
       const response = await axios.post(
@@ -91,7 +98,7 @@ export const updateTask = (updatedTask: ITask) => {
 
     try {
       const updatedTask = await fetchData();
-      dispatch(boardActions.updateTask(updatedTask));
+      dispatch(boardActions.updateTasks(updatedTask));
     } catch (error) {
       console.log(error);
     }

@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
 import classes from "./board.module.css";
 import { ITask } from "../../interfaces";
-import { groupBy } from "lodash";
 import Task from "../task/task";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch } from "../../state/store";
+import { useSelector } from "react-redux";
 const Board = () => {
   const columns = useSelector(({ boards }: any) => boards.columns);
-  const tasks = useSelector(({ boards }: any) => boards.tasks);
 
   return (
     <>

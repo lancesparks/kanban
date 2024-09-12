@@ -205,6 +205,7 @@ func createSubtask(ctx *gin.Context) {
 func updateTask(ctx *gin.Context) {
   fmt.Println("updating subtask")
    var task db.Task 
+   var boardID = ctx.Param("boardID")
    err := ctx.Bind(&task)
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
@@ -213,7 +214,7 @@ func updateTask(ctx *gin.Context) {
        return
    }
    
-   res, err := db.UpdateTask(&task)
+   res, err := db.UpdateTask(&task,boardID)
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
            "error": err.Error(),

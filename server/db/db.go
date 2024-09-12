@@ -95,6 +95,7 @@ func GetColumns(BoardID any) ([]*Column, error) {
     var columns []*Column
 
      err := db.Model(&Column{}).
+        Where("board_id = ?", BoardID).
         Preload("Tasks").
         Preload("Tasks.Subtasks").
         Find(&columns).Error
@@ -145,7 +146,7 @@ func GetTask(id any) (*Task, error) {
  return &task, nil
 }
 
-func UpdateTask(task *Task) (*Task, error) {
+func UpdateTask(task *Task, boardID any) (*Task, error) {
    var taskToUpdate Task
    result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
    if result.RowsAffected == 0 {

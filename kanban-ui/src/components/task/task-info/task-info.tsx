@@ -7,12 +7,12 @@ import ItemSelect from "../../item-select/item-select";
 import { useSelector } from "react-redux";
 
 interface TaskInfoProps {
+  task: any;
   editMode: any;
   handleEditMode: any;
 }
 
-const TaskInfo = ({ editMode, handleEditMode }: TaskInfoProps) => {
-  const task = useSelector(({ boards }: any) => boards.selectedTask);
+const TaskInfo = ({ task, editMode, handleEditMode }: TaskInfoProps) => {
   const [showEditTaskMenu, setShowEditTaskMenu] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,

@@ -6,9 +6,8 @@ import Sidebar from "./components/sidebar/sidebar";
 import Board from "./components/board/board";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "./state/store";
-
 import { getAllBoards, getBoardColumns } from "./state/board-action";
-
+import { boardActions } from "./state/boardSlice";
 function App() {
   const [selectedBoardID, setSelectedBoardID] = useState(1);
   const dispatch = useDispatch<AppDispatch>();

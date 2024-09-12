@@ -4,6 +4,7 @@ export interface ITask {
   status: string | null;
   title: string | null;
   subtasks: ISubtask[];
+  column_id: number;
 }
 
 export interface ISubtask {

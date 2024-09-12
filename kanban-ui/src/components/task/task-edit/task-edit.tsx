@@ -7,14 +7,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateTask } from "../../../state/board-action";
 import { AppDispatch } from "../../../state/store";
 interface TaskEditProps {
+  task: any;
   editMode: any;
   handleEditMode: any;
 }
 
-const TaskEdit = ({ editMode, handleEditMode }: TaskEditProps) => {
+const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
+  const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const dispatch = useDispatch<AppDispatch>();
-  const task = useSelector(({ boards }: any) => boards.selectedTask);
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
+
+  console.log(currentBoard);
 
   const handleSetTitle = (e: any) => {
     setUpdatedTask((prev) => {
@@ -35,10 +38,12 @@ const TaskEdit = ({ editMode, handleEditMode }: TaskEditProps) => {
   };
 
   const statusChanged = (e: any) => {
+    console.log(e);
     setUpdatedTask((prev) => {
       return {
         ...prev,
-        status: e,
+        column_id: e.ID,
+        status: e.status,
       };
     });
   };

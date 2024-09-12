@@ -1,10 +1,8 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { ISubtask, ITask } from "../interfaces";
-import axios from "axios";
-import { updateTask } from "./board-action";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ISubtask, ITask, IColumnStatus } from "../interfaces";
 export interface BoardState {
   boards: any[];
-  boardStatuses: string[];
+  boardStatuses: IColumnStatus[];
   columns: any[];
   tasks: ITask[];
   selectedTask: ITask | null;
@@ -40,7 +38,7 @@ export const boardSlice = createSlice({
     setStatuses: (state, action: PayloadAction<string[]>) => {
       state.statuses = action.payload;
     },
-    selectedTask: (state, action: PayloadAction<ITask>) => {
+    setSelectedTask: (state, action: PayloadAction<ITask>) => {
       state.selectedTask = action.payload;
     },
     addTasks: (state, action: PayloadAction<ITask[]>) => {
@@ -57,13 +55,24 @@ export const boardSlice = createSlice({
       let updatedTask = { ...state.tasks[0], description: action.payload };
       state.tasks = [...state.tasks, updatedTask];
     },
-    updateTask: (state, action: PayloadAction<any>) => {
+    updateTasks: (state, action: PayloadAction<any>) => {
       let updatedTask = { ...action.payload };
 
-      state.tasks = [
-        ...state.tasks.filter((task) => task.ID !== updatedTask.ID),
-        updatedTask,
-      ];
+      state.columns = state.columns.map((col) => {
+        if (col.ID === updatedTask.column_id) {
+          return {
+            ...col,
+            tasks: col.tasks.map((task: any) => {
+              if (task.ID === updatedTask.ID) {
+                return { ...task };
+              }
+              return task;
+            }),
+          };
+        }
+        return col;
+      });
+
       state.selectedTask = { ...updatedTask };
     },
     updateSubtasks: (state, action: PayloadAction<ISubtask[]>) => {

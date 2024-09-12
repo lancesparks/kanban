@@ -7,7 +7,6 @@ import { updateSubTask } from "../../state/board-action";
 const SubTaskInfo = ({ task_id, subtask }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const handleSetSubTaskStatus = (subtask: any) => {
-    console.log(subtask);
     dispatch(updateSubTask(subtask));
   };
 

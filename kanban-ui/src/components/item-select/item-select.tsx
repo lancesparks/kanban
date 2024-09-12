@@ -21,18 +21,24 @@ const ItemSelect = ({
 }: ItemSelectProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const taskStatuses =
-    useSelector(({ boards }: any) =>
-      boards.boardStatuses.map((status: string) => status.toUpperCase())
-    ) || [];
-  const [selected, setSelected] = useState(task.status);
+  const taskStatuses = useSelector(({ boards }: any) => boards.boardStatuses);
+
+  const [selected, setSelected] = useState(
+    taskStatuses.find((status: any) => +status.ID === +task.column_id)
+  );
   const setCurrentStatus = (e: any) => {
+    const newStatus = taskStatuses.find((status: any) => +status.ID === +e);
+
     setSelected(e);
-    dispatch(updateTask({ ...task, status: e }));
+    dispatch(
+      updateTask({ ...task, status: newStatus.status, column_id: newStatus.ID })
+    );
   };
 
-  const handleStatusChange = (e: string) => {
-    statusChanged(e);
+  const handleStatusChange = (e: any) => {
+    const newStatus = taskStatuses.find((status: any) => +status.ID === +e);
+
+    statusChanged(newStatus);
     setSelected(e);
   };
 
@@ -43,16 +49,16 @@ const ItemSelect = ({
       <span className={classes.select_container}>
         <select
           className={classes.status_select}
-          value={selected!}
+          value={selected?.ID!}
           onChange={(e) =>
             !isEditMode
               ? setCurrentStatus(e.target.value)
               : handleStatusChange(e.target.value)
           }
         >
-          {taskStatuses.map((status: string, index: number) => (
-            <option key={index} value={status}>
-              {status}
+          {taskStatuses.map((status: any, index: number) => (
+            <option key={index} value={status.ID}>
+              {status.status}
             </option>
           ))}
         </select>
