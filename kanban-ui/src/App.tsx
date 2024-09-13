@@ -16,13 +16,15 @@ function App() {
 
   useEffect(() => {
     dispatch(getAllBoards());
-  }, [columns]);
+  }, []);
 
   useEffect(() => {
     dispatch(getBoardColumns(selectedBoardID));
   }, [selectedBoardID]);
 
   const handleSelectedBoard = (boardId: any) => {
+    const board = boards.find((board: IBoard) => board.ID === boardId);
+    dispatch(boardActions.setSelectedBoard(board));
     setSelectedBoardID(boardId);
   };
 

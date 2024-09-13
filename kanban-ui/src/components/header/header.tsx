@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <header className={classes.headerContainer}>
-      <AddBoardModal ref={dialog} />
+      <AddBoardModal title={"Add New Board"} currentBoard={null} ref={dialog} />
       <div className={classes.containerLogo}>
         <img src={logo} className={classes.containerLogo_logo} alt="logo"></img>
         {/* <h1 className="containerLogo_appLogo">kanban</h1> */}

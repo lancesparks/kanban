@@ -10,6 +10,16 @@ import (
 	// "github.com/gin-gonic/gin"
 	// "kanban.com/kanban-app/db"
 )
+
+
+type UpdateBoardRequest struct {
+    UpdatedBoard db.Board `json:"board"`
+} 
+
+type UpdateTaskRequest struct {
+    UpdatedTask db.Task `json:"updatedTask"`
+    BoardID     int     `json:"boardID"`
+}
  
 func InitRouter() *gin.Engine {
    r := gin.Default()
@@ -21,6 +31,7 @@ func InitRouter() *gin.Engine {
    r.GET("/columns/:id", getColumns)
    r.POST("/boards/tasks", createTask)
    r.POST("/boards/tasks/:id", updateTask)
+   r.POST("/boards/update", updateBoard)
    r.PATCH("/boards/tasks/subtask", updateSubTask)
    r.GET("/boards/tasks/:boardID", getTasks)
    r.POST("/boards/tasks/subtask", createSubtask)
@@ -202,19 +213,49 @@ func createSubtask(ctx *gin.Context) {
    })
 }
 
-func updateTask(ctx *gin.Context) {
-  fmt.Println("updating subtask")
-   var task db.Task 
-   var boardID = ctx.Param("boardID")
-   err := ctx.Bind(&task)
+
+func updateBoard(ctx *gin.Context){
+    var req UpdateBoardRequest
+    err := ctx.Bind(&req)   
+
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    updatedBoard :=  req.UpdatedBoard
+   
+   res,cols, err := db.UpdateBoard(&updatedBoard)
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
            "error": err.Error(),
        })
        return
    }
+   ctx.JSON(http.StatusCreated, gin.H{
+       "board": res,
+       "columns": cols,
+   })   
+
+}
+
+func updateTask(ctx *gin.Context) {
+    var req UpdateTaskRequest
+    err := ctx.Bind(&req)
+
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    updatedTask := req.UpdatedTask
+    boardID := req.BoardID
    
-   res, err := db.UpdateTask(&task,boardID)
+   res,cols, err := db.UpdateTask(&updatedTask, boardID)
    if err != nil {
        ctx.JSON(http.StatusBadRequest, gin.H{
            "error": err.Error(),
@@ -223,6 +264,7 @@ func updateTask(ctx *gin.Context) {
    }
    ctx.JSON(http.StatusCreated, gin.H{
        "task": res,
+       "columns": cols,
    })   
 }
 

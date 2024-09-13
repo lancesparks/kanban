@@ -83,6 +83,30 @@ func GetBoards() ([]*Board, error) {
 }
 
 
+func UpdateBoard(board *Board) (*Board, []*Column, error) {
+    
+    err := db.Save(&board).Error
+
+    columns, _ := GetColumns(board.ID)
+
+//            var taskToUpdate Task
+//    result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
+//    if result.RowsAffected == 0 {
+//        return &taskToUpdate, nil, errors.New("task not updated")
+//    }
+
+//    columns, err := GetColumns(boardID)
+//    if err != nil {
+//        return task, nil, err
+//    }
+
+//    return task, columns, nil
+    
+    
+    return board, columns, err
+}
+
+
 func GetTasks(BoardID any) ([]*Task, error) {
     var tasks []*Task
     db.Where("board_id = ?", BoardID).Preload("Subtasks").Find(&tasks)
@@ -95,7 +119,7 @@ func GetColumns(BoardID any) ([]*Column, error) {
     var columns []*Column
 
      err := db.Model(&Column{}).
-        Where("board_id = ?", BoardID).
+        Where("board_id = ?", BoardID).  
         Preload("Tasks").
         Preload("Tasks.Subtasks").
         Find(&columns).Error
@@ -146,15 +170,20 @@ func GetTask(id any) (*Task, error) {
  return &task, nil
 }
 
-func UpdateTask(task *Task, boardID any) (*Task, error) {
+func UpdateTask(task *Task, boardID any) (*Task, []*Column, error) {
    var taskToUpdate Task
    result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
    if result.RowsAffected == 0 {
-       return &taskToUpdate, errors.New("subtask not updated")
+       return &taskToUpdate, nil, errors.New("task not updated")
    }
-   return task, nil
-}
 
+   columns, err := GetColumns(boardID)
+   if err != nil {
+       return task, nil, err
+   }
+
+   return task, columns, nil
+}
 
 func UpdateSubTask(subtask *Subtask) (*[]Subtask, error) {
     var subtaskToUpdate Subtask

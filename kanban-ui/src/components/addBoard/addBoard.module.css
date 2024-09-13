@@ -13,11 +13,13 @@
 .modalForm {
   position: relative;
   height: 100%;
+  display: grid;
 }
 
 .boardColumn {
   display: flex;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .removeBoardColumn {
@@ -71,7 +73,6 @@ h3 {
 }
 
 .btnSection {
-  position: absolute;
   width: 100%;
   bottom: 0.05rem;
   display: grid;

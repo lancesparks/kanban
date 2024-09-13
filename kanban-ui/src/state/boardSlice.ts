@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ISubtask, ITask, IColumnStatus } from "../interfaces";
+import { updateBoard } from "./board-action";
 export interface BoardState {
   boards: any[];
   boardStatuses: IColumnStatus[];
   columns: any[];
   tasks: ITask[];
   selectedTask: ITask | null;
+  selectedBoard: any | null;
   statuses: string[];
 }
 
@@ -15,6 +17,7 @@ const initialState: BoardState = {
   columns: [],
   tasks: [],
   selectedTask: null,
+  selectedBoard: null,
   statuses: [],
 };
 
@@ -23,11 +26,32 @@ export const boardSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    setSelectedBoard: (state, action: PayloadAction<any>) => {
+      state.selectedBoard = action.payload;
+    },
+    updateBoard: (state, action: PayloadAction<any>) => {
+      state.boards = [
+        ...state.boards.map((board) => {
+          if (board.ID === action.payload.board.ID) {
+            return {
+              ...action.payload.board,
+              columns: action.payload.columns,
+            };
+          }
+          return board;
+        }),
+      ];
+
+      state.selectedBoard = action.payload.board;
+      state.columns = action.payload.columns.sort(
+        (a: any, b: any) => a.ID - b.ID
+      );
+    },
     updateColumn: (state, action: PayloadAction<any[]>) => {
-      state.columns = action.payload;
+      state.columns = action.payload.sort((a: any, b: any) => a.ID - b.ID);
     },
     addColumns: (state, action: PayloadAction<any[]>) => {
-      state.columns = action.payload;
+      state.columns = action.payload.sort((a: any, b: any) => a.ID - b.ID);
     },
     addBoardStatuses: (state, action: PayloadAction<any[]>) => {
       state.boardStatuses = action.payload;
@@ -56,23 +80,10 @@ export const boardSlice = createSlice({
       state.tasks = [...state.tasks, updatedTask];
     },
     updateTasks: (state, action: PayloadAction<any>) => {
-      let updatedTask = { ...action.payload };
-
-      state.columns = state.columns.map((col) => {
-        if (col.ID === updatedTask.column_id) {
-          return {
-            ...col,
-            tasks: col.tasks.map((task: any) => {
-              if (task.ID === updatedTask.ID) {
-                return { ...task };
-              }
-              return task;
-            }),
-          };
-        }
-        return col;
-      });
-
+      let updatedTask = { ...action.payload.task };
+      state.columns = [
+        ...action.payload.columns.sort((a: any, b: any) => a.ID - b.ID),
+      ];
       state.selectedTask = { ...updatedTask };
     },
     updateSubtasks: (state, action: PayloadAction<ISubtask[]>) => {
@@ -84,22 +95,24 @@ export const boardSlice = createSlice({
 
       currentTask = { ...currentTask, subtasks: subtasks };
 
-      state.columns = state.columns.map((col) => {
-        // console.log(JSON.stringify(currentTask, null, 2));
+      state.columns = state.columns
+        .map((col) => {
+          // console.log(JSON.stringify(currentTask, null, 2));
 
-        if (col.ID === currentTask.column_id) {
-          return {
-            ...col,
-            tasks: col.tasks.map((task: any) => {
-              if (task.ID === currentTask.ID) {
-                return { ...task, subtasks: subtasks };
-              }
-              return task;
-            }),
-          };
-        }
-        return col;
-      });
+          if (col.ID === currentTask.column_id) {
+            return {
+              ...col,
+              tasks: col.tasks.map((task: any) => {
+                if (task.ID === currentTask.ID) {
+                  return { ...task, subtasks: subtasks };
+                }
+                return task;
+              }),
+            };
+          }
+          return col;
+        })
+        .sort((a: any, b: any) => a.ID - b.ID);
       state.selectedTask = { ...currentTask };
     },
   },

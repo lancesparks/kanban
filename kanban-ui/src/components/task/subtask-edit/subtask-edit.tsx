@@ -25,7 +25,7 @@ const SubTaskEdit = ({
   return (
     <section className={classes.taskEdit_subtaskContainer}>
       <input
-        className={`${classes.taskEdit_input} ${classes.subtaskInput}`}
+        className={`edit_input ${classes.subtaskInput}`}
         type="text"
         value={title}
         onChange={(e) => handleUpdateSubTasks(e.target.value, ID)}

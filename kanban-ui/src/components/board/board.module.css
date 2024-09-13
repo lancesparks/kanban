@@ -12,3 +12,16 @@
   text-transform: uppercase;
   margin-bottom: 2rem;
 }
+
+.addColumnSection {
+  display: flex;
+  align-items: center;
+  background-color: var(--darkgrey);
+  padding: 0rem 2rem;
+  margin-left: 2rem;
+  cursor: pointer;
+}
+
+.addColumnSection h1 {
+  color: var(--mediumgrey);
+}

@@ -17,8 +17,6 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
 
-  console.log(currentBoard);
-
   const handleSetTitle = (e: any) => {
     setUpdatedTask((prev) => {
       return {
@@ -38,7 +36,6 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
   };
 
   const statusChanged = (e: any) => {
-    console.log(e);
     setUpdatedTask((prev) => {
       return {
         ...prev,
@@ -79,7 +76,7 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
       ...updatedTask,
       subtasks: updatedTask.subtasks.filter((subtask) => subtask.title !== ""),
     }; //filter out empty subtasks
-    dispatch(updateTask(taskToSave));
+    dispatch(updateTask(taskToSave, currentBoard.ID));
     handleEditMode(false);
   };
 
@@ -107,7 +104,7 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
       <section className={classes.taskEdit_title}>
         <h3>Title</h3>
         <input
-          className={classes.taskEdit_input}
+          className={"edit_input"}
           value={updatedTask.title as string}
           onChange={handleSetTitle}
           type="text"
@@ -116,7 +113,7 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
       <section className={classes.taskEdit_description}>
         <h3>Description</h3>
         <textarea
-          className={classes.taskEdit_input}
+          className={"edit_input"}
           name=""
           id=""
           cols={30}

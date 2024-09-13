@@ -16,7 +16,7 @@ export const getAllBoards = () => {
 
     try {
       const boards = await fetchData();
-      const columns = getColumns(boards);
+      dispatch(boardActions.setSelectedBoard(boards[0]));
       dispatch(boardActions.addBoard(boards));
     } catch (error) {
       console.log(error);
@@ -54,6 +54,29 @@ export const getBoardColumns = (boardId: number) => {
   };
 };
 
+export const updateBoard = (board: ITask) => {
+  return async (dispatch: any) => {
+    const fetchData = async () => {
+      const response = await axios.post(`http://127.0.0.1:8080/boards/update`, {
+        board,
+      });
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Could not fetch data!");
+      }
+
+      return response.data;
+    };
+
+    try {
+      const data = await fetchData();
+      console.log(data);
+      dispatch(boardActions.updateBoard(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 const getColumns = (data: any) => {
   return data[0].columns.map((col: any) => col.title);
 };
@@ -81,24 +104,23 @@ export const getAllTasks = (selectedBoardID: number) => {
   };
 };
 
-export const updateTask = (updatedTask: ITask) => {
-  console.log(updatedTask);
+export const updateTask = (updatedTask: ITask, boardID: number) => {
   return async (dispatch: any) => {
     const fetchData = async () => {
       const response = await axios.post(
         `http://127.0.0.1:8080/boards/tasks/${updatedTask.ID}`,
-        updatedTask
+        { updatedTask, boardID }
       );
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Could not fetch data!");
       }
 
-      return response.data.task;
+      return response.data;
     };
 
     try {
-      const updatedTask = await fetchData();
-      dispatch(boardActions.updateTasks(updatedTask));
+      const updated = await fetchData();
+      dispatch(boardActions.updateTasks(updated));
     } catch (error) {
       console.log(error);
     }

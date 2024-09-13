@@ -20,7 +20,7 @@ const ItemSelect = ({
   statusChanged = null,
 }: ItemSelectProps) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const taskStatuses = useSelector(({ boards }: any) => boards.boardStatuses);
 
   const [selected, setSelected] = useState(
@@ -31,7 +31,10 @@ const ItemSelect = ({
 
     setSelected(e);
     dispatch(
-      updateTask({ ...task, status: newStatus.status, column_id: newStatus.ID })
+      updateTask(
+        { ...task, status: newStatus.status, column_id: newStatus.ID },
+        currentBoard.ID
+      )
     );
   };
 
