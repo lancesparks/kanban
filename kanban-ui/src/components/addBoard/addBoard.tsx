@@ -1,27 +1,18 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import classes from "./addBoard.module.css";
 import cross from "../../assets/icon-cross.svg";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../state/store";
-import { updateBoard } from "../../state/board-action";
 
 interface BoardProps {
   title: string;
   currentBoard: any;
+  handleSaveChanges: any;
 }
 
 const AddBoardModal = forwardRef(function AddBoardModal(
-  { title, currentBoard }: BoardProps,
+  { title, currentBoard, handleSaveChanges }: BoardProps,
   ref: any
 ) {
-  const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
   const modal = document.getElementById("root");
   const [currentBoardState, setCurrentBoardState] = useState(currentBoard);
@@ -59,30 +50,6 @@ const AddBoardModal = forwardRef(function AddBoardModal(
       };
       return [...prev, newColumn];
     });
-  };
-
-  const handleSaveChanges = () => {
-    if (!currentBoardState) {
-      return;
-    }
-
-    let updatedColumns = columns.length > 0 ? columns : null;
-
-    if (updatedColumns && updatedColumns.length > 0) {
-      updatedColumns = updatedColumns
-        .filter((col: any) => col.title !== "")
-        .map((col: any) => {
-          return {
-            ...col,
-            title: col.title.toUpperCase(),
-          };
-        });
-    }
-
-    const updatedBoard = { ...currentBoard, columns: updatedColumns };
-
-    dispatch(updateBoard(updatedBoard));
-    dialog.current?.close();
   };
 
   const handleDeleteColumn = (col: any) => {
@@ -152,7 +119,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           </button>
           <button
             className={`${classes.btn} ${classes.saveChanges}`}
-            onClick={handleSaveChanges}
+            onClick={() => handleSaveChanges(currentBoardState, columns)}
           >
             Save Changes
           </button>

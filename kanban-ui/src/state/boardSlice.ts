@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ISubtask, ITask, IColumnStatus } from "../interfaces";
-import { updateBoard } from "./board-action";
+import { createBoard, updateBoard } from "./board-action";
 export interface BoardState {
   boards: any[];
   boardStatuses: IColumnStatus[];
@@ -55,6 +55,9 @@ export const boardSlice = createSlice({
     },
     addBoardStatuses: (state, action: PayloadAction<any[]>) => {
       state.boardStatuses = action.payload;
+    },
+    addCreatedBoard: (state, action: PayloadAction<any>) => {
+      state.boards = [...state.boards, action.payload];
     },
     addBoard: (state, action: PayloadAction<any[]>) => {
       state.boards = action.payload.sort((a: any, b: any) => a.ID - b.ID);

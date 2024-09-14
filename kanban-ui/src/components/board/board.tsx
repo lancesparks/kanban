@@ -1,13 +1,15 @@
 import classes from "./board.module.css";
 import { ITask } from "../../interfaces";
 import Task from "../task/task";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import AddBoardModal from "../addBoard/addBoard";
+import { updateBoard } from "../../state/board-action";
+import { AppDispatch } from "../../state/store";
 const Board = () => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const columns = useSelector(({ boards }: any) => boards.columns);
-
+  const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
 
   const handleDialog = (e: any) => {
@@ -17,11 +19,36 @@ const Board = () => {
     }
   };
 
+  const handleSaveChanges = (currentBoardState: any, columns: any) => {
+    if (!currentBoard) {
+      return;
+    }
+
+    let updatedColumns = columns.length > 0 ? columns : null;
+
+    if (updatedColumns && updatedColumns.length > 0) {
+      updatedColumns = updatedColumns
+        .filter((col: any) => col.title !== "")
+        .map((col: any) => {
+          return {
+            ...col,
+            title: col.title.toUpperCase(),
+          };
+        });
+    }
+
+    const updatedBoard = { ...currentBoard, columns: updatedColumns };
+
+    dispatch(updateBoard(updatedBoard));
+    dialog.current?.close();
+  };
+
   return (
     <>
       <AddBoardModal
         title={"Edit Board"}
         currentBoard={currentBoard}
+        handleSaveChanges={handleSaveChanges}
         ref={dialog}
       />
       {columns?.map((col: any) => {

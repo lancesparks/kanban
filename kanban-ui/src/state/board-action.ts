@@ -3,6 +3,26 @@ import { boardActions } from "./boardSlice";
 
 import axios from "axios";
 
+export const createBoard = (board: any) => {
+  return async (dispatch: any) => {
+    const fetchData = async () => {
+      const response = await axios.post(`http://127.0.0.1:8080/boards`, board);
+
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Could not fetch data!");
+      }
+      return response.data.board;
+    };
+
+    try {
+      const board = await fetchData();
+      dispatch(boardActions.addCreatedBoard(board));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const getAllBoards = () => {
   return async (dispatch: any) => {
     const fetchData = async () => {
