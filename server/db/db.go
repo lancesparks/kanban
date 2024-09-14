@@ -86,22 +86,36 @@ func GetBoards() ([]*Board, error) {
 func UpdateBoard(board *Board) (*Board, []*Column, error) {
     
     err := db.Save(&board).Error
+    var existingColumns []Column
+    db.Model(board).Association("Columns").Find(&existingColumns)
+
+    // Get the IDs of the columns in the payload
+    var columnIDsInPayload []uint
+    for _, column := range board.Columns {
+        columnIDsInPayload = append(columnIDsInPayload, column.ID)
+    }
+
+    // Get the IDs of the columns that exist in the database but are not in the payload
+    var columnIDsToDelete []uint
+    for _, column := range existingColumns {
+        found := false
+        for _, id := range columnIDsInPayload {
+            if column.ID == id {
+                found = true
+                break
+            }
+        }
+        if !found {
+            columnIDsToDelete = append(columnIDsToDelete, column.ID)
+        }
+    }
+
+    // Delete the columns that exist in the database but are not in the payload
+    if len(columnIDsToDelete) > 0 {
+        db.Unscoped().Model(&Column{}).Where("id IN (?)", columnIDsToDelete).Delete(&Column{})
+    }
 
     columns, _ := GetColumns(board.ID)
-
-//            var taskToUpdate Task
-//    result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
-//    if result.RowsAffected == 0 {
-//        return &taskToUpdate, nil, errors.New("task not updated")
-//    }
-
-//    columns, err := GetColumns(boardID)
-//    if err != nil {
-//        return task, nil, err
-//    }
-
-//    return task, columns, nil
-    
     
     return board, columns, err
 }
