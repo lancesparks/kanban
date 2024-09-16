@@ -6,6 +6,7 @@ import { useRef } from "react";
 import AddBoardModal from "../addBoard/addBoard";
 import { updateBoard } from "../../state/board-action";
 import { AppDispatch } from "../../state/store";
+import EmptyBoard from "../emptyBoard/EmptyBoard";
 const Board = () => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const columns = useSelector(({ boards }: any) => boards.columns);
@@ -40,7 +41,6 @@ const Board = () => {
     const updatedBoard = { ...currentBoard, columns: updatedColumns };
 
     dispatch(updateBoard(updatedBoard));
-    dialog.current?.close();
   };
 
   return (
@@ -51,24 +51,28 @@ const Board = () => {
         handleSaveChanges={handleSaveChanges}
         ref={dialog}
       />
-      {columns?.map((col: any) => {
-        return (
-          <section className={classes.taskColumn} key={col.ID}>
-            <h3 className={classes.columnTitle}>
-              {col?.title} ({col?.tasks?.length})
-            </h3>
+      {columns?.length > 0 &&
+        columns?.map((col: any) => {
+          return (
+            <section className={classes.taskColumn} key={col.ID}>
+              <h3 className={classes.columnTitle}>
+                {col?.title} ({col?.tasks?.length})
+              </h3>
 
-            {col?.tasks &&
-              col?.tasks.map((task: ITask) => {
-                return <Task key={task.ID} task={task} />;
-              })}
-          </section>
-        );
-      })}
+              {col?.tasks &&
+                col?.tasks.map((task: ITask) => {
+                  return <Task key={task.ID} task={task} />;
+                })}
+            </section>
+          );
+        })}
+      {columns?.length > 0 && (
+        <section className={classes.addColumnSection} onClick={handleDialog}>
+          <h1 className="headingXL"> + Add New Column</h1>
+        </section>
+      )}
 
-      <section className={classes.addColumnSection} onClick={handleDialog}>
-        <h1 className="headingXL"> + Add New Column</h1>
-      </section>
+      {columns?.length === 0 && <EmptyBoard currentBoard={currentBoard} />}
     </>
   );
 };

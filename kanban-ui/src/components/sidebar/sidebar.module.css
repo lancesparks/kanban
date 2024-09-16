@@ -3,6 +3,7 @@
   background-color: var(--darkgrey);
   height: 100%;
   display: grid;
+  overflow-y: auto;
 }
 
 .sidebarContainer * {

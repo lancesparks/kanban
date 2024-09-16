@@ -25,6 +25,7 @@ function App() {
   const handleSelectedBoard = (boardId: any) => {
     const board = boards.find((board: IBoard) => board.ID === boardId);
     dispatch(boardActions.setSelectedBoard(board));
+
     setSelectedBoardID(boardId);
   };
 

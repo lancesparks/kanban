@@ -23,3 +23,26 @@
 .sidebarItem:hover .boardIcon {
   fill: var(--white);
 }
+
+.newBoard {
+  color: var(--mainpurple);
+  display: flex;
+  align-items: center;
+  padding: 1rem 4rem;
+  cursor: pointer;
+}
+
+.newBoard > *:hover {
+  color: var(--mainpurplehover);
+}
+
+.newBoard:hover {
+  color: var(--mainpurplehover);
+}
+
+.sideBarItemActive {
+  background-color: var(--mainpurple);
+  color: var(--white);
+  border-top-right-radius: 2.4rem;
+  border-bottom-right-radius: 2.4rem;
+}

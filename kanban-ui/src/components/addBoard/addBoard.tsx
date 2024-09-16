@@ -1,4 +1,10 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import classes from "./addBoard.module.css";
 import cross from "../../assets/icon-cross.svg";
@@ -19,6 +25,16 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   const [columns, setColumns] = useState<any[]>(
     currentBoardState ? currentBoardState.columns : [{ ID: "1", title: "" }]
   );
+
+  useEffect(() => {
+    const close = (e: any) => {
+      if (e.keyCode === "Escape" || e.keyCode === 27) {
+        setCurrentBoardState(null);
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
 
   const handleSetTitle = (e: any) => {
     setCurrentBoardState((prev: any) => {
@@ -58,6 +74,12 @@ const AddBoardModal = forwardRef(function AddBoardModal(
     });
   };
 
+  const saveChanges = () => {
+    handleSaveChanges(currentBoardState, columns);
+    setCurrentBoardState(null);
+    console.log(currentBoardState);
+  };
+
   useImperativeHandle(ref, () => {
     return {
       open() {
@@ -73,7 +95,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
         <h1>{title}</h1>
         <section>
           <h3>Board Name</h3>
-          {currentBoard && (
+          {currentBoardState && (
             <input
               type="text"
               value={currentBoardState.name}
@@ -81,7 +103,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
               onChange={handleSetTitle}
             />
           )}
-          {!currentBoard && (
+          {!currentBoardState && (
             <input
               type="text"
               className={classes.modalInput}
@@ -91,7 +113,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
         </section>
         <section>
           <h3>Board Columns</h3>
-          {columns.map((col: any) => {
+          {columns?.map((col: any) => {
             return (
               <div className={classes.boardColumn} key={col.ID}>
                 <input
@@ -119,7 +141,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           </button>
           <button
             className={`${classes.btn} ${classes.saveChanges}`}
-            onClick={() => handleSaveChanges(currentBoardState, columns)}
+            onClick={saveChanges}
           >
             Save Changes
           </button>

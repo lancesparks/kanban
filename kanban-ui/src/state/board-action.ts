@@ -36,8 +36,8 @@ export const getAllBoards = () => {
 
     try {
       const boards = await fetchData();
-      dispatch(boardActions.setSelectedBoard(boards[0]));
       dispatch(boardActions.addBoard(boards));
+      dispatch(boardActions.setSelectedBoard(boards[0]));
     } catch (error) {
       console.log(error);
     }
