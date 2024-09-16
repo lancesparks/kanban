@@ -27,14 +27,8 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   );
 
   useEffect(() => {
-    const close = (e: any) => {
-      if (e.keyCode === "Escape" || e.keyCode === 27) {
-        setCurrentBoardState(null);
-      }
-    };
-    window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
-  }, []);
+    setCurrentBoardState(currentBoard);
+  }, [currentBoard]);
 
   const handleSetTitle = (e: any) => {
     setCurrentBoardState((prev: any) => {
@@ -77,7 +71,6 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   const saveChanges = () => {
     handleSaveChanges(currentBoardState, columns);
     setCurrentBoardState(null);
-    console.log(currentBoardState);
   };
 
   useImperativeHandle(ref, () => {

@@ -7,20 +7,19 @@ import {
 } from "react";
 import classes from "./task-dialog.module.css";
 import { createPortal } from "react-dom";
-import { ISubtask, ITask } from "../../../interfaces";
 import TaskInfo from "../task-info/task-info";
 import TaskEdit from "../task-edit/task-edit";
-import { useDispatch, useSelector } from "react-redux";
-import { boardActions } from "../../../state/boardSlice";
+import { useSelector } from "react-redux";
 
 interface TaskDialogProps {
   task: any;
   editMode: any;
-  handleEditMode: any;
+  handleCloseDialog: any;
+  addTask: boolean;
 }
 
 const TaskDialog = forwardRef(function TaskDialog(
-  { task, editMode, handleEditMode }: TaskDialogProps,
+  { task, editMode, handleCloseDialog, addTask }: TaskDialogProps,
   ref: any
 ) {
   const dialog = useRef<HTMLDialogElement>();
@@ -50,19 +49,27 @@ const TaskDialog = forwardRef(function TaskDialog(
     // @ts-ignore
     <dialog ref={dialog} className={`modal ${classes.modalContainer}`}>
       <form className={classes.taskForm} method="dialog">
-        {!editMode && (
+        {!editMode && !addTask && (
           <TaskInfo
             task={selectedTask || currentTask}
             editMode={editMode}
-            handleEditMode={handleEditMode}
+            handleEditMode={handleCloseDialog}
           ></TaskInfo>
         )}
-
-        {editMode && (
+        {editMode && !addTask && (
           <TaskEdit
+            title="Edit Task"
             task={selectedTask || currentTask}
             editMode={editMode}
-            handleEditMode={handleEditMode}
+            handleCloseDialog={handleCloseDialog}
+          ></TaskEdit>
+        )}
+        {!editMode && addTask && selectedTask && (
+          <TaskEdit
+            title="Add Task"
+            task={selectedTask}
+            editMode={false}
+            handleCloseDialog={handleCloseDialog}
           ></TaskEdit>
         )}
       </form>

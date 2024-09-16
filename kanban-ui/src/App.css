@@ -6,8 +6,10 @@
 }
 
 .mainContainer {
+  height: 90vh;
   display: flex;
   padding: 2rem 4rem;
+  overflow-y: auto;
 }
 
 .headingXL {

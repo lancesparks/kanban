@@ -1,10 +1,10 @@
 export interface ITask {
-  ID: number;
+  ID?: number;
   description: string | null;
   status: string | null;
   title: string | null;
   subtasks: ISubtask[];
-  column_id: number;
+  column_id: string | number;
 }
 
 export interface ISubtask {

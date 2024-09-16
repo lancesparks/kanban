@@ -53,7 +53,8 @@ const Task = ({ task }: any) => {
         task={task}
         ref={dialog}
         editMode={editMode}
-        handleEditMode={handleEditMode}
+        handleCloseDialog={handleEditMode}
+        addTask={false}
       ></TaskDialog>
     </section>
   );

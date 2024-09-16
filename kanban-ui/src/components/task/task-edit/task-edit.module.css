@@ -2,18 +2,6 @@
   display: grid;
 }
 
-.taskEdit_title {
-}
-
-.taskEdit_description {
-}
-
-.taskEdit_subtasks {
-}
-
-.taskEdit_status {
-}
-
 .taskEdit_button {
   display: flex;
   justify-content: center;

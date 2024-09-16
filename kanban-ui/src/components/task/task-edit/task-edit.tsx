@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ITask, ISubtask } from "../../../interfaces";
 import classes from "./task-edit.module.css";
 import ItemSelect from "../../item-select/item-select";
@@ -6,16 +6,28 @@ import SubTaskEdit from "../subtask-edit/subtask-edit";
 import { useSelector, useDispatch } from "react-redux";
 import { updateTask } from "../../../state/board-action";
 import { AppDispatch } from "../../../state/store";
+import { boardActions } from "../../../state/boardSlice";
+import ts from "typescript";
 interface TaskEditProps {
+  title: string;
   task: any;
   editMode: any;
-  handleEditMode: any;
+  handleCloseDialog: any;
 }
 
-const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
+const TaskEdit = ({
+  title,
+  task,
+  editMode,
+  handleCloseDialog,
+}: TaskEditProps) => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const dispatch = useDispatch<AppDispatch>();
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
+
+  useEffect(() => {
+    setUpdatedTask(task);
+  }, [task]);
 
   const handleSetTitle = (e: any) => {
     setUpdatedTask((prev) => {
@@ -76,8 +88,12 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
       ...updatedTask,
       subtasks: updatedTask.subtasks.filter((subtask) => subtask.title !== ""),
     }; //filter out empty subtasks
+
     dispatch(updateTask(taskToSave, currentBoard.ID));
-    handleEditMode(false);
+    // @ts-ignore
+    dispatch(boardActions.setSelectedTask(null));
+
+    handleCloseDialog(false);
   };
 
   const handleAddSubTask = () => {
@@ -99,13 +115,14 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
 
   return (
     // @ts-ignore
+
     <div className={classes.taskEdit_container}>
-      <h1>Edit Task</h1>
+      <h1>{title}</h1>
       <section className={classes.taskEdit_title}>
         <h3>Title</h3>
         <input
           className={"edit_input"}
-          value={updatedTask.title as string}
+          value={updatedTask?.title as string}
           onChange={handleSetTitle}
           type="text"
         />
@@ -148,7 +165,7 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
       <section className={classes.taskEdi_status}>
         <ItemSelect
           title={"Status"}
-          task={task}
+          task={updatedTask}
           isEditMode={true}
           statusChanged={statusChanged}
         />
@@ -162,7 +179,7 @@ const TaskEdit = ({ task, editMode, handleEditMode }: TaskEditProps) => {
         </a>
         <a
           className={`${classes.taskEdit_button} ${classes.btnControl}`}
-          onClick={() => handleEditMode()}
+          onClick={() => handleCloseDialog()}
         >
           Cancel
         </a>

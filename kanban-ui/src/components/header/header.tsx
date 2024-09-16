@@ -1,53 +1,68 @@
 import classes from "./header.module.css";
 import logo from "../../assets/logo-light.svg";
 import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
-import AddBoardModal from "../addBoard/addBoard";
-import { useRef } from "react";
+import TaskDialog from "../task/task-dialog/task-dialog";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../state/store";
-import { useDispatch } from "react-redux";
-import { createBoard } from "../../state/board-action";
+import { boardActions } from "../../state/boardSlice";
 
 const Header = () => {
   const dialog = useRef<HTMLDialogElement>();
   const dispatch = useDispatch<AppDispatch>();
+  const currentColumns = useSelector(({ boards }: any) => boards.columns);
+  const [defaultColumn, setDefaultColumn] = useState<string | null>(
+    currentColumns[0]?.ID
+  );
+  const [showDialog, setShowDialog] = useState(true);
+
+  const defaultTask = {
+    title: "",
+    description: "",
+    column_id: defaultColumn!,
+    subtasks: [],
+    status: currentColumns[0]?.title,
+  };
   const handleDialog = (e: any) => {
-    if (dialog.current) {
-      // @ts-ignore
-      dialog.current.open();
-    }
+    setShowDialog(true);
+    setTimeout(() => {
+      if (dialog.current) {
+        // @ts-ignore
+        dialog.current.open();
+        dispatch(boardActions.setSelectedTask(defaultTask));
+      }
+    });
   };
 
-  const handleSaveChanges = (currentBoardState: any, columns: any) => {
-    const newBoard = {
-      ...currentBoardState,
-      columns: columns.map((col: any) => {
-        return {
-          title: col.title,
-        };
-      }),
-    };
-
-    dispatch(createBoard(newBoard));
+  const handleCloseDialog = () => {
+    setShowDialog(false);
   };
+
+  useEffect(() => {
+    setDefaultColumn(currentColumns[0]?.ID);
+  }, [currentColumns]);
 
   return (
     <header className={classes.headerContainer}>
-      <AddBoardModal
-        title={"Add New Board"}
-        currentBoard={null}
-        handleSaveChanges={handleSaveChanges}
-        ref={dialog}
-      />
+      {defaultColumn && showDialog && (
+        <TaskDialog
+          task={null}
+          editMode={false}
+          handleCloseDialog={handleCloseDialog}
+          addTask={true}
+          ref={dialog}
+        />
+      )}
+
       <div className={classes.containerLogo}>
         <img src={logo} className={classes.containerLogo_logo} alt="logo"></img>
-        {/* <h1 className="containerLogo_appLogo">kanban</h1> */}
       </div>
       <div className={classes.headerContainer_actions}>
         <h1 className={classes.header}>Platform Launch</h1>
 
         <div className={classes.action_container}>
           <button className={classes.addBtn} onClick={handleDialog}>
-            + Add New Board
+            + Add New Task
           </button>
           <img src={ellipsis} alt="ellipsis" className={classes.ellipsis}></img>
         </div>
