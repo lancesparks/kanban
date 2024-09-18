@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./sidebar.module.css";
 import SideBarItem from "../sidebar-item/sidebar-item";
 import hideIcon from "../../assets/icon-hide-sidebar.svg";
@@ -12,9 +12,15 @@ import { createBoard } from "../../state/board-action";
 import { IBoard } from "../../interfaces";
 import { boardActions } from "../../state/boardSlice";
 
-const SideBar = ({ boardTypes, handleSelectedBoard }: any) => {
+const SideBar = ({
+  boardTypes,
+  handleSelectedBoard,
+  hideSideBar,
+  handleHideSideBar,
+}: any) => {
   const dialog = useRef<HTMLDialogElement>();
   const dispatch = useDispatch<AppDispatch>();
+
   const handleDialog = (e: any) => {
     dispatch(boardActions.setSelectedBoard(null));
     if (dialog.current) {
@@ -44,7 +50,13 @@ const SideBar = ({ boardTypes, handleSelectedBoard }: any) => {
   };
 
   return (
-    <div className={classes.sidebarContainer}>
+    <div
+      className={
+        hideSideBar
+          ? `${classes.sidebarContainer} ${classes.hideSideBar}`
+          : `${classes.sidebarContainer} ${classes.showSideBar}`
+      }
+    >
       <AddBoardModal
         title={"Add New Board"}
         currentBoard={null}
@@ -83,10 +95,10 @@ const SideBar = ({ boardTypes, handleSelectedBoard }: any) => {
               <img src={darkTheme} alt="" className={classes.darkTheme} />
             </div>
           </div>
-          <div className={classes.hideContainer}>
+          <div className={classes.hideContainer} onClick={handleHideSideBar}>
             <p className={classes.hide}>
               <img src={hideIcon} />
-              Hide Sidebar
+              <span>Hide Sidebar</span>
             </p>
           </div>
         </div>

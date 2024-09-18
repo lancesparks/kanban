@@ -4,6 +4,8 @@
   height: 100%;
   display: grid;
   overflow-y: auto;
+  position: relative;
+  transition: all 0.5s ease-in-out;
 }
 
 .sidebarContainer * {
@@ -122,4 +124,12 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.hideSideBar {
+  transform: translateX(-100%);
+}
+
+.showSideBar {
+  transform: translateX(0%);
 }

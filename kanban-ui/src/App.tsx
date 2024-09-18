@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "./state/store";
 import { getAllBoards, getBoardColumns } from "./state/board-action";
 import { boardActions } from "./state/boardSlice";
+import showIcon from "./assets/icon-show-sidebar.svg";
+
 function App() {
   const [selectedBoardID, setSelectedBoardID] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
-  const columns = useSelector(({ boards }: any) => boards.columns);
   const boards = useSelector(({ boards }: any) => boards.boards);
+  const [hideSideBar, setHideSideBar] = useState(false);
 
   useEffect(() => {
     dispatch(getAllBoards());
@@ -28,6 +30,9 @@ function App() {
 
     setSelectedBoardID(boardId);
   };
+  const handleHideSideBar = () => {
+    setHideSideBar((prev) => !prev);
+  };
 
   return (
     <div className="App">
@@ -37,7 +42,20 @@ function App() {
           <Sidebar
             boardTypes={boards}
             handleSelectedBoard={handleSelectedBoard}
+            hideSideBar={hideSideBar}
+            handleHideSideBar={handleHideSideBar}
           ></Sidebar>
+
+          <div
+            className={
+              hideSideBar
+                ? "showSideBarSection showSideBar"
+                : "showSideBarSection hideSideBar"
+            }
+            onClick={handleHideSideBar}
+          >
+            <img src={showIcon} alt="" />
+          </div>
         </aside>
         <div className="mainContainer">
           {boards?.map((board: IBoard) => {

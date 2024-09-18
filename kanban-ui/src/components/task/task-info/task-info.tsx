@@ -68,11 +68,9 @@ const TaskInfo = ({ task, editMode, handleEditMode }: TaskInfoProps) => {
             </h1>
             <p className={classes.taskInfo_description}>{task.description}</p>
             {showEditTaskMenu && (
-              <div
-                className={classes.taskEdit_menu}
-                onClick={() => handleEditMode()}
-              >
-                <p>Edit Task</p>
+              <div className={classes.taskEdit_menu}>
+                <p onClick={() => handleEditMode()}>Edit Task</p>
+                <p>Delete Task</p>
               </div>
             )}
           </section>

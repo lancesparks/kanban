@@ -24,6 +24,8 @@
   background-color: var(--verydarkgrey);
   border-radius: 4px;
   padding: 2rem;
+  flex-direction: column;
+  row-gap: 1.5rem;
 }
 
 .taskEdit_menu p {

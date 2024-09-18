@@ -2,12 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import classes from "./task.module.css";
 import TaskDialog from "./task-dialog/task-dialog";
 import { ISubtask } from "../../interfaces";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../state/store";
-import { boardActions } from "../../state/boardSlice";
 
 const Task = ({ task }: any) => {
-  const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
   const [editMode, setEditMode] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
@@ -29,6 +25,17 @@ const Task = ({ task }: any) => {
   useEffect(() => {
     handleSetSubtaskStatus();
   }, [task]);
+
+  useEffect(() => {
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.code === "Escape") {
+        setEditMode(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => document.removeEventListener("keydown", handleEscapeKey);
+  }, []);
 
   const handleSetSubtaskStatus = () => {
     setSubtaskStatus((prev: any) => {
