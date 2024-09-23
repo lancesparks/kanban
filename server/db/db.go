@@ -225,14 +225,43 @@ func UpdateSubTasks(subtasks []Subtask) (*[]Subtask, error) {
 }
 
 
+func DeleteBoard(ID *string) ([]Board, error) {
+    // Delete the task
+    result := db.Unscoped().Delete(&Board{}, *ID)
 
-func DeleteTask(id *string) error {
-   var taskToDelete Task
-   result := db.Where("id = ?", id).Delete(&taskToDelete)
-   if result.RowsAffected == 0 {
-       return errors.New("task not deleted")
-   }
-   return nil
+    if result.RowsAffected == 0 {
+        return nil, errors.New("board not deleted")
+    }
+
+    // Delete associated subtasks
+    db.Where("board_id = ?", *ID).Delete(&Column{})
+
+    // Find and return remaining tasks
+    var remainingBoards []Board
+    db.Where("id != ?", ID).Find(&remainingBoards)
+
+    return remainingBoards, nil
+}
+
+
+
+
+func DeleteTask(ID *string) ([]Task, error) {
+    // Delete the task
+    result := db.Unscoped().Delete(&Task{}, *ID)
+
+    if result.RowsAffected == 0 {
+        return nil, errors.New("task not deleted")
+    }
+
+    // Delete associated subtasks
+    db.Where("task_id = ?", *ID).Delete(&Subtask{})
+
+    // Find and return remaining tasks
+    var remainingTasks []Task
+    db.Where("id != ?", ID).Find(&remainingTasks)
+
+    return remainingTasks, nil
 }
 
 

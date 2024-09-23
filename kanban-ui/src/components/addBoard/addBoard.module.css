@@ -1,5 +1,5 @@
 .modalContainer {
-  height: 42.9rem;
+  height: 52.9rem;
   width: 48rem;
   max-width: 48rem;
   border: none;
@@ -65,26 +65,54 @@ h3 {
   width: 100%;
   border-radius: 2.4rem;
   font-size: var(--headerS);
-  padding: 1rem 0rem;
+  height: 3.5rem;
   font-weight: bold;
   line-height: 1.2rem;
   box-shadow: none;
   border: none;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
 }
 
 .btnSection {
   width: 100%;
   bottom: 0.05rem;
   display: grid;
-  row-gap: 1rem;
 }
 
 .addBtn {
   color: var(--mainpurple);
   background-color: var(--white);
 }
+.addBtn:hover {
+  background-color: var(--lineslight);
+}
 
 .saveChanges {
   color: var(--white);
   background-color: var(--mainpurple);
+}
+
+.saveChanges:hover {
+  background-color: var(--mainpurplehover);
+}
+
+.boardTitle {
+  display: grid;
+}
+
+.boardError {
+  color: red;
+  margin-top: -0.5rem;
+  font-size: var(--headerS);
+  font-weight: 500;
+}
+
+.deleteBoard {
+  background-color: var(--red);
+  color: white;
+}
+
+.deleteBoard:hover {
+  background-color: var(--redhover);
 }

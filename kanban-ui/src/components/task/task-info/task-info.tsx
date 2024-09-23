@@ -4,15 +4,18 @@ import { ISubtask, ITask } from "../../../interfaces";
 import SubTaskInfo from "../../subtask-info/subtask-info";
 import ellipsis from "../../../assets/icon-vertical-ellipsis.svg";
 import ItemSelect from "../../item-select/item-select";
-import { useSelector } from "react-redux";
+import { AppDispatch } from "../../../state/store";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTask } from "../../../state/board-action";
 
 interface TaskInfoProps {
   task: any;
-  editMode: any;
   handleEditMode: any;
 }
 
-const TaskInfo = ({ task, editMode, handleEditMode }: TaskInfoProps) => {
+const TaskInfo = ({ task, handleEditMode }: TaskInfoProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedBoard = useSelector(({ boards }: any) => boards?.selectedBoard);
   const [showEditTaskMenu, setShowEditTaskMenu] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,
@@ -49,6 +52,10 @@ const TaskInfo = ({ task, editMode, handleEditMode }: TaskInfoProps) => {
     return [];
   };
 
+  const handleDeleteTask = () => {
+    dispatch(deleteTask(task, selectedBoard.ID));
+  };
+
   subtasks = setSubTasks(task) ?? null;
 
   return (
@@ -70,7 +77,7 @@ const TaskInfo = ({ task, editMode, handleEditMode }: TaskInfoProps) => {
             {showEditTaskMenu && (
               <div className={classes.taskEdit_menu}>
                 <p onClick={() => handleEditMode()}>Edit Task</p>
-                <p>Delete Task</p>
+                <p onClick={handleDeleteTask}>Delete Task</p>
               </div>
             )}
           </section>

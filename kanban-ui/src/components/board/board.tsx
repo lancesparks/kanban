@@ -68,7 +68,7 @@ const Board = () => {
         })}
       {columns?.length > 0 && (
         <section className={classes.addColumnSection} onClick={handleDialog}>
-          <h1 className="headingXL"> + Add New Column</h1>
+          <h1 className="headingXL"> + Add / Edit Columns</h1>
         </section>
       )}
 

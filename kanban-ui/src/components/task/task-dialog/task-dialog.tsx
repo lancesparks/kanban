@@ -52,7 +52,6 @@ const TaskDialog = forwardRef(function TaskDialog(
         {!editMode && !addTask && (
           <TaskInfo
             task={selectedTask || currentTask}
-            editMode={editMode}
             handleEditMode={handleCloseDialog}
           ></TaskInfo>
         )}
@@ -60,7 +59,6 @@ const TaskDialog = forwardRef(function TaskDialog(
           <TaskEdit
             title="Edit Task"
             task={selectedTask || currentTask}
-            editMode={editMode}
             handleCloseDialog={handleCloseDialog}
           ></TaskEdit>
         )}
@@ -68,7 +66,6 @@ const TaskDialog = forwardRef(function TaskDialog(
           <TaskEdit
             title="Add Task"
             task={selectedTask}
-            editMode={false}
             handleCloseDialog={handleCloseDialog}
           ></TaskEdit>
         )}

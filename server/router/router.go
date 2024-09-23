@@ -20,6 +20,9 @@ type UpdateTaskRequest struct {
     UpdatedTask db.Task `json:"updatedTask"`
     BoardID     int     `json:"boardID"`
 }
+
+
+
  
 func InitRouter() *gin.Engine {
    r := gin.Default()
@@ -31,6 +34,7 @@ func InitRouter() *gin.Engine {
    r.GET("/columns/:id", getColumns)
    r.POST("/boards/tasks", createTask)
    r.POST("/boards/tasks/:id", updateTask)
+   r.DELETE("/boards/tasks/:id", deleteTask)
    r.POST("/boards/update", updateBoard)
    r.PATCH("/boards/tasks/subtask", updateSubTask)
    r.GET("/boards/tasks/:boardID", getTasks)
@@ -39,6 +43,7 @@ func InitRouter() *gin.Engine {
 //    r.POST("/movies", postMovie)
 //    r.PUT("/movies/:id", putMovie)
    r.DELETE("/boards/tasks/subtask/", deleteSubtask)
+      r.DELETE("/boards/:id", deleteBoard)
    return r
 }
 
@@ -291,8 +296,74 @@ func updateSubTask(ctx *gin.Context) {
    })   
 }
 
+
+func deleteBoard(ctx *gin.Context) { 
+    var req = ctx.Param("id")
+    err := ctx.Bind(&req)
+
+
+    fmt.Printf("Affected rows: %s\n", req)
+
+
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+
+
+
+   
+   res, err := db.DeleteBoard(&req)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusCreated, gin.H{
+       "boards": res,
+   })   
+
+}
+
+
+
+func deleteTask(ctx *gin.Context) { 
+    var req = ctx.Param("id")
+    err := ctx.Bind(&req)
+
+
+    fmt.Printf("Affected rows: %s\n", req)
+
+
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+
+
+
+   
+   res, err := db.DeleteTask(&req)
+   if err != nil {
+       ctx.JSON(http.StatusBadRequest, gin.H{
+           "error": err.Error(),
+       })
+       return
+   }
+   ctx.JSON(http.StatusCreated, gin.H{
+       "tasks": res,
+   })   
+
+}
+
 func deleteSubtask(ctx *gin.Context) {
-  fmt.Println("deleting subtask")
    var subtask db.Subtask 
    err := ctx.Bind(&subtask)
    if err != nil {

@@ -11,14 +11,13 @@ import ts from "typescript";
 interface TaskEditProps {
   title: string;
   task: any;
-  editMode: any;
   handleCloseDialog: any;
 }
 
 const TaskEdit = ({
   title,
   task,
-  editMode,
+
   handleCloseDialog,
 }: TaskEditProps) => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);

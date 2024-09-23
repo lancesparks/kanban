@@ -11,7 +11,6 @@ const EmptyBoard = ({ currentBoard }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDialog = (e: any) => {
-    dispatch(boardActions.setSelectedBoard(null));
     if (dialog.current) {
       // @ts-ignore
       dialog.current.open();
