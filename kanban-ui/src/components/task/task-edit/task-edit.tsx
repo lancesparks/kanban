@@ -12,13 +12,18 @@ interface TaskEditProps {
   title: string;
   task: any;
   handleCloseDialog: any;
+  handleDeleteTask: any;
+  handleTaskError: any;
+  taskError: boolean;
 }
 
 const TaskEdit = ({
   title,
   task,
-
   handleCloseDialog,
+  handleDeleteTask,
+  handleTaskError,
+  taskError,
 }: TaskEditProps) => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const dispatch = useDispatch<AppDispatch>();
@@ -88,6 +93,11 @@ const TaskEdit = ({
       subtasks: updatedTask.subtasks.filter((subtask) => subtask.title !== ""),
     }; //filter out empty subtasks
 
+    if (taskToSave.title === "") {
+      handleTaskError(true);
+      return;
+    }
+    handleTaskError(false);
     dispatch(updateTask(taskToSave, currentBoard.ID));
     // @ts-ignore
     dispatch(boardActions.setSelectedTask(null));
@@ -116,7 +126,12 @@ const TaskEdit = ({
     // @ts-ignore
 
     <div className={classes.taskEdit_container}>
-      <h1>{title}</h1>
+      <h1 className={classes.taskEditTitle}>
+        {title}
+        {taskError && (
+          <span className={classes.taskError}>Task title is required</span>
+        )}
+      </h1>
       <section className={classes.taskEdit_title}>
         <h3>Title</h3>
         <input
@@ -182,6 +197,14 @@ const TaskEdit = ({
         >
           Cancel
         </a>
+        {handleDeleteTask && (
+          <a
+            className={`${classes.taskEdit_button} ${classes.btnControl} ${classes.btnDelete}`}
+            onClick={() => handleDeleteTask()}
+          >
+            Delete Task
+          </a>
+        )}
       </section>
     </div>
   );

@@ -21,16 +21,18 @@
 .subtaskBtn {
   background-color: var(--white);
   color: var(--mainpurple);
+  cursor: pointer;
 }
 
 .btnControl {
   background-color: var(--mainpurple);
   color: var(--white);
   margin-bottom: 1rem;
+  cursor: pointer;
 }
 
 .btnControl:hover {
-  background-color: var(--mainpurple);
+  background-color: var(--mainpurplehover);
 }
 
 h3 {
@@ -49,4 +51,28 @@ input {
 textarea {
   padding: 1rem;
   resize: none;
+}
+
+.btnDelete {
+  background-color: var(--red);
+  color: white;
+}
+
+.btnDelete:hover {
+  background-color: var(--redhover);
+}
+
+.subtaskBtn:hover {
+  background-color: var(--lineslight);
+}
+
+.taskError {
+  color: red;
+
+  font-size: var(--headerS);
+  font-weight: 500;
+}
+
+.taskEditTitle {
+  display: grid;
 }

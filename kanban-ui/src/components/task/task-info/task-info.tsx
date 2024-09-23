@@ -11,11 +11,14 @@ import { deleteTask } from "../../../state/board-action";
 interface TaskInfoProps {
   task: any;
   handleEditMode: any;
+  handleDeleteTask: any;
 }
 
-const TaskInfo = ({ task, handleEditMode }: TaskInfoProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const selectedBoard = useSelector(({ boards }: any) => boards?.selectedBoard);
+const TaskInfo = ({
+  task,
+  handleEditMode,
+  handleDeleteTask,
+}: TaskInfoProps) => {
   const [showEditTaskMenu, setShowEditTaskMenu] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,
@@ -52,10 +55,6 @@ const TaskInfo = ({ task, handleEditMode }: TaskInfoProps) => {
     return [];
   };
 
-  const handleDeleteTask = () => {
-    dispatch(deleteTask(task, selectedBoard.ID));
-  };
-
   subtasks = setSubTasks(task) ?? null;
 
   return (
@@ -77,7 +76,7 @@ const TaskInfo = ({ task, handleEditMode }: TaskInfoProps) => {
             {showEditTaskMenu && (
               <div className={classes.taskEdit_menu}>
                 <p onClick={() => handleEditMode()}>Edit Task</p>
-                <p onClick={handleDeleteTask}>Delete Task</p>
+                <p onClick={() => handleDeleteTask(task)}>Delete Task</p>
               </div>
             )}
           </section>

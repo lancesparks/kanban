@@ -3,35 +3,33 @@ import logo from "../../assets/logo-light.svg";
 import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
 import TaskDialog from "../task/task-dialog/task-dialog";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../state/store";
-import { boardActions } from "../../state/boardSlice";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const dialog = useRef<HTMLDialogElement>();
-  const dispatch = useDispatch<AppDispatch>();
   const currentColumns = useSelector(({ boards }: any) => boards.columns);
   const [defaultColumn, setDefaultColumn] = useState<string | null>(
     currentColumns[0]?.ID
   );
   const [showDialog, setShowDialog] = useState(true);
 
-  const defaultTask = {
+  const blankTask = {
     title: "",
     description: "",
     column_id: defaultColumn!,
     subtasks: [],
     status: currentColumns[0]?.title,
   };
+
+  const [defaultTask, setDefaultTask] = useState<any>(blankTask);
+
   const handleDialog = (e: any) => {
+    setDefaultTask(defaultTask);
     setShowDialog(true);
-    setTimeout(() => {
-      if (dialog.current) {
-        // @ts-ignore
-        dialog.current.open();
-        dispatch(boardActions.setSelectedTask(defaultTask));
-      }
-    });
+    if (dialog.current) {
+      // @ts-ignore
+      dialog.current.open();
+    }
   };
 
   const handleCloseDialog = () => {
@@ -46,7 +44,7 @@ const Header = () => {
     <header className={classes.headerContainer}>
       {defaultColumn && showDialog && (
         <TaskDialog
-          task={null}
+          defaultTask={defaultTask}
           editMode={false}
           handleCloseDialog={handleCloseDialog}
           addTask={true}

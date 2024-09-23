@@ -21,8 +21,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    dispatch(getBoardColumns(selectedBoardID));
-  }, [selectedBoardID]);
+    if (!boards || boards.length === 0) {
+      return;
+    }
+    const defaultBoardId = boards[0].ID;
+
+    dispatch(getBoardColumns(defaultBoardId));
+    handleSelectedBoard(defaultBoardId);
+  }, [boards]);
 
   const handleSelectedBoard = (boardId: any) => {
     const board = boards.find((board: IBoard) => board.ID === boardId);

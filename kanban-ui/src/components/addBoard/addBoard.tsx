@@ -59,6 +59,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   const handleAddColumn = (e: any) => {
     e.preventDefault();
     setColumns((prev: any) => {
+      if (!prev) {
+        return [{ ID: "1", title: "" }];
+      }
       const newColumn = {
         ID: prev.length > 0 ? prev[prev.length - 1].ID + 2 : 1,
         title: "",
@@ -155,12 +158,14 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           >
             Save Changes
           </button>
-          <button
-            className={`${classes.btn} ${classes.deleteBoard}`}
-            onClick={handleDeleteBoard}
-          >
-            Delete Board
-          </button>
+          {currentBoard && (
+            <button
+              className={`${classes.btn} ${classes.deleteBoard}`}
+              onClick={handleDeleteBoard}
+            >
+              Delete Board
+            </button>
+          )}
         </section>
       </form>
     </dialog>,

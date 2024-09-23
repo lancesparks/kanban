@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import classes from "./task.module.css";
 import TaskDialog from "./task-dialog/task-dialog";
 import { ISubtask } from "../../interfaces";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../state/store";
+import { boardActions } from "../../state/boardSlice";
 
 const Task = ({ task }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const dialog = useRef<HTMLDialogElement>();
   const [editMode, setEditMode] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
@@ -12,6 +17,7 @@ const Task = ({ task }: any) => {
   });
 
   const handleDialog = (e: any) => {
+    dispatch(boardActions.setSelectedTask(task));
     if (dialog.current) {
       // @ts-ignore
       dialog.current.open();
@@ -57,7 +63,7 @@ const Task = ({ task }: any) => {
         {subtaskStatus.completed} of {subtaskStatus.count} subtasks
       </p>
       <TaskDialog
-        task={task}
+        defaultTask={task}
         ref={dialog}
         editMode={editMode}
         handleCloseDialog={handleEditMode}
