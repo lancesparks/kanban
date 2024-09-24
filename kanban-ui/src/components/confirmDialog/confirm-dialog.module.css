@@ -1,0 +1,62 @@
+.modalContainer {
+  width: 48rem;
+  max-width: 48rem;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: var(--darkgrey);
+  color: var(--white);
+  padding: 2rem 3rem;
+  border-radius: 6px;
+}
+
+.modalContent {
+  display: grid;
+  row-gap: 2rem;
+}
+
+.modalTitle {
+  color: var(--red) !important;
+  margin: 0px !important;
+}
+
+.modalText {
+  font-size: 1.3rem;
+  line-height: 2.3rem;
+  color: var(--mediumgrey);
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.deleteButton {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.deleteButton:hover {
+  background-color: var(--redhover) !important;
+}
+
+.cancelButton {
+  color: var(--mainpurple);
+}
+
+.cancelButton:hover {
+  color: var(--mainpurplehover);
+  background-color: var(--lineslight);
+}
+
+.modalButton {
+  height: 4rem;
+  width: 20rem;
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 2.3rem;
+  font-weight: bold;
+  cursor: pointer;
+}

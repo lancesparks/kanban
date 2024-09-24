@@ -11,9 +11,9 @@ import { boardActions } from "./state/boardSlice";
 import showIcon from "./assets/icon-show-sidebar.svg";
 
 function App() {
-  const [selectedBoardID, setSelectedBoardID] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
   const boards = useSelector(({ boards }: any) => boards.boards);
+  const [selectedBoardID, setSelectedBoardID] = useState(boards[0]?.ID);
   const [hideSideBar, setHideSideBar] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!boards || boards.length === 0) {
+    if (!boards || boards.length === 0 || selectedBoardID) {
       return;
     }
     const defaultBoardId = boards[0].ID;
@@ -33,7 +33,8 @@ function App() {
   const handleSelectedBoard = (boardId: any) => {
     const board = boards.find((board: IBoard) => board.ID === boardId);
     dispatch(boardActions.setSelectedBoard(board));
-
+    dispatch(getBoardColumns(board.ID));
+    dispatch(boardActions.setSelectedBoard(board));
     setSelectedBoardID(boardId);
   };
   const handleHideSideBar = () => {
@@ -63,7 +64,7 @@ function App() {
             <img src={showIcon} alt="" />
           </div>
         </aside>
-        <div className="mainContainer">
+        <div className="mainContainer" id="mainContainer">
           {boards?.map((board: IBoard) => {
             if (board.ID === selectedBoardID) {
               return <Board key={board.ID} />;

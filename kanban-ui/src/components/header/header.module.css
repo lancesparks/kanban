@@ -39,12 +39,43 @@
 
 .action_container {
   display: flex;
-  flex: 0 0 18%;
+  flex: 0 0 12%;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+.boardMenu {
+  position: absolute;
+  top: 7rem;
+  right: 0px;
+  font-size: 2rem;
+  background: black;
+  padding: 1rem 2rem;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.boardMenuEdit {
+  cursor: pointer;
+  color: var(--mediumgrey);
+}
+
+.boardMenuEdit:hover {
+  color: var(--lineslight);
+}
+
+.boardMenuDelete {
+  margin-top: 1rem;
+  color: var(--red);
+  cursor: pointer;
+}
+
+.boardMenuDelete:hover {
+  color: var(--redhover);
 }
 
 .ellipsis {
+  cursor: pointer;
   height: 65%;
 }
 

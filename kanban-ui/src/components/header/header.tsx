@@ -1,17 +1,27 @@
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../state/store";
+import { deleteBoard, updateBoard } from "../../state/board-action";
+import ConfirmDialog from "../confirmDialog/confirm-dialog";
+import AddBoardModal from "../addBoard/addBoard";
 import classes from "./header.module.css";
 import logo from "../../assets/logo-light.svg";
 import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
 import TaskDialog from "../task/task-dialog/task-dialog";
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 
 const Header = () => {
   const dialog = useRef<HTMLDialogElement>();
+  const deleteDialog = useRef<HTMLDialogElement>();
+  const dispatch = useDispatch<AppDispatch>();
   const currentColumns = useSelector(({ boards }: any) => boards.columns);
+  const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const [defaultColumn, setDefaultColumn] = useState<string | null>(
     currentColumns[0]?.ID
   );
   const [showDialog, setShowDialog] = useState(true);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(true);
+
+  const [showBoardMenu, setShowBoardMenu] = useState(false);
 
   const blankTask = {
     title: "",
@@ -23,8 +33,38 @@ const Header = () => {
 
   const [defaultTask, setDefaultTask] = useState<any>(blankTask);
 
-  const handleDialog = (e: any) => {
-    setDefaultTask(defaultTask);
+  const handleSaveChanges = (currentBoardState: any, columns: any) => {
+    if (!currentBoard) {
+      return;
+    }
+
+    let updatedColumns = columns.length > 0 ? columns : null;
+
+    if (updatedColumns && updatedColumns.length > 0) {
+      updatedColumns = updatedColumns
+        .filter((col: any) => col.title !== "")
+        .map((col: any) => {
+          return {
+            ...col,
+            title: col.title.toUpperCase(),
+          };
+        });
+    }
+
+    const updatedBoard = { ...currentBoard, columns: updatedColumns };
+
+    dispatch(updateBoard(updatedBoard));
+  };
+
+  const handleDeleteBoard = (e: any) => {
+    if (!currentBoard) {
+      return;
+    }
+
+    dispatch(deleteBoard(currentBoard.ID));
+  };
+
+  const handleDialog = () => {
     setShowDialog(true);
     if (dialog.current) {
       // @ts-ignore
@@ -32,8 +72,36 @@ const Header = () => {
     }
   };
 
+  const handleDeleteDialog = () => {
+    setShowDeleteDialog(true);
+
+    setTimeout(() => {
+      if (deleteDialog.current) {
+        // @ts-ignore
+        deleteDialog.current.open();
+      }
+    });
+  };
+
   const handleCloseDialog = () => {
     setShowDialog(false);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setShowDeleteDialog(false);
+  };
+
+  const handleAddNewTask = () => {
+    setDefaultTask(defaultTask);
+    handleDialog();
+  };
+
+  const handleEditBoard = () => {
+    handleDialog();
+  };
+
+  const handleShowBoardMenu = () => {
+    setShowBoardMenu((prev) => !prev);
   };
 
   useEffect(() => {
@@ -42,7 +110,7 @@ const Header = () => {
 
   return (
     <header className={classes.headerContainer}>
-      {defaultColumn && showDialog && (
+      {defaultColumn && showDialog && !showBoardMenu && (
         <TaskDialog
           defaultTask={defaultTask}
           editMode={false}
@@ -52,6 +120,25 @@ const Header = () => {
         />
       )}
 
+      {showBoardMenu && (
+        <AddBoardModal
+          title={"Edit Board"}
+          currentBoard={currentBoard}
+          handleSaveChanges={handleSaveChanges}
+          ref={dialog}
+        />
+      )}
+
+      {showDeleteDialog && (
+        <ConfirmDialog
+          dialogTitle="Delete Board"
+          dialogText={`Are you sure you want to delete the '${currentBoard?.name}' board? This action will remove all columns and tasks and cannot be reversed.`}
+          handleCloseDialog={handleCloseDeleteDialog}
+          handleDelete={handleDeleteBoard}
+          ref={deleteDialog}
+        ></ConfirmDialog>
+      )}
+
       <div className={classes.containerLogo}>
         <img src={logo} className={classes.containerLogo_logo} alt="logo"></img>
       </div>
@@ -59,10 +146,29 @@ const Header = () => {
         <h1 className={classes.header}>Platform Launch</h1>
 
         <div className={classes.action_container}>
-          <button className={classes.addBtn} onClick={handleDialog}>
+          <button className={classes.addBtn} onClick={handleAddNewTask}>
             + Add New Task
           </button>
-          <img src={ellipsis} alt="ellipsis" className={classes.ellipsis}></img>
+          <img
+            src={ellipsis}
+            alt="ellipsis"
+            className={classes.ellipsis}
+            onClick={handleShowBoardMenu}
+          ></img>
+
+          {showBoardMenu && (
+            <section className={classes.boardMenu} onBlur={handleShowBoardMenu}>
+              <p className={classes.boardMenuEdit} onClick={handleEditBoard}>
+                Edit Board
+              </p>
+              <p
+                className={classes.boardMenuDelete}
+                onClick={handleDeleteDialog}
+              >
+                Delete Board
+              </p>
+            </section>
+          )}
         </div>
       </div>
     </header>

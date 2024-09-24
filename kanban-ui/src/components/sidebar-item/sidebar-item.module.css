@@ -13,7 +13,8 @@
 }
 
 .sidebarItem:hover {
-  background-color: var(--mainpurple);
+  background-color: var(--white);
+  color: var(--mainpurplehover) !important;
 }
 
 .sidebarItem:hover {

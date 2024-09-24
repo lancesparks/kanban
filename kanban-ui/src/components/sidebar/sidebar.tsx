@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import classes from "./sidebar.module.css";
 import SideBarItem from "../sidebar-item/sidebar-item";
 import hideIcon from "../../assets/icon-hide-sidebar.svg";
@@ -10,7 +9,6 @@ import { AppDispatch } from "../../state/store";
 import { useDispatch } from "react-redux";
 import { createBoard } from "../../state/board-action";
 import { IBoard } from "../../interfaces";
-import { boardActions } from "../../state/boardSlice";
 
 const SideBar = ({
   boardTypes,

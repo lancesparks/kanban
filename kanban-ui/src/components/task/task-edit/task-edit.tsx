@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ITask, ISubtask } from "../../../interfaces";
 import classes from "./task-edit.module.css";
 import ItemSelect from "../../item-select/item-select";
@@ -7,7 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateTask } from "../../../state/board-action";
 import { AppDispatch } from "../../../state/store";
 import { boardActions } from "../../../state/boardSlice";
-import ts from "typescript";
+import ConfirmDialog from "../../confirmDialog/confirm-dialog";
+
 interface TaskEditProps {
   title: string;
   task: any;
@@ -27,11 +28,28 @@ const TaskEdit = ({
 }: TaskEditProps) => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const dispatch = useDispatch<AppDispatch>();
+  const deleteDialog = useRef<HTMLDialogElement>();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(true);
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
 
   useEffect(() => {
     setUpdatedTask(task);
   }, [task]);
+
+  const handleDeleteDialog = () => {
+    setShowDeleteDialog(true);
+
+    setTimeout(() => {
+      if (deleteDialog.current) {
+        // @ts-ignore
+        deleteDialog.current.open();
+      }
+    });
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setShowDeleteDialog(false);
+  };
 
   const handleSetTitle = (e: any) => {
     setUpdatedTask((prev) => {
@@ -126,6 +144,16 @@ const TaskEdit = ({
     // @ts-ignore
 
     <div className={classes.taskEdit_container}>
+      {showDeleteDialog && (
+        <ConfirmDialog
+          dialogTitle="Delete Task?"
+          dialogText={`Are you sure you want to delete the '${task.title}' task and its subtasks? This action cannot be reversed.`}
+          handleCloseDialog={handleCloseDeleteDialog}
+          handleDelete={handleDeleteTask}
+          ref={deleteDialog}
+        ></ConfirmDialog>
+      )}
+
       <h1 className={classes.taskEditTitle}>
         {title}
         {taskError && (
@@ -200,7 +228,7 @@ const TaskEdit = ({
         {handleDeleteTask && (
           <a
             className={`${classes.taskEdit_button} ${classes.btnControl} ${classes.btnDelete}`}
-            onClick={() => handleDeleteTask()}
+            onClick={handleDeleteDialog}
           >
             Delete Task
           </a>

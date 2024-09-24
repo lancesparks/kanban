@@ -28,11 +28,12 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   const [currentBoardState, setCurrentBoardState] = useState(currentBoard);
   const [boardError, setBoardError] = useState(false);
   const [columns, setColumns] = useState<any[]>(
-    currentBoardState ? currentBoardState.columns : [{ ID: "1", title: "" }]
+    currentBoardState ? currentBoardState.columns : [{ title: "" }]
   );
 
   useEffect(() => {
     setCurrentBoardState(currentBoard);
+    setColumns(currentBoard?.columns);
   }, [currentBoard]);
 
   const handleSetTitle = (e: any) => {
@@ -60,10 +61,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
     e.preventDefault();
     setColumns((prev: any) => {
       if (!prev) {
-        return [{ ID: "1", title: "" }];
+        return [{ title: "" }];
       }
       const newColumn = {
-        ID: prev.length > 0 ? prev[prev.length - 1].ID + 2 : 1,
         title: "",
       };
       return [...prev, newColumn];
@@ -126,9 +126,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
         </section>
         <section>
           <h3>Board Columns</h3>
-          {columns?.map((col: any) => {
+          {columns?.map((col: any, index: any) => {
             return (
-              <div className={classes.boardColumn} key={col.ID}>
+              <div className={classes.boardColumn} key={index}>
                 <input
                   type="text"
                   value={col.title}
@@ -158,14 +158,14 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           >
             Save Changes
           </button>
-          {currentBoard && (
+          {/* {currentBoard && (
             <button
               className={`${classes.btn} ${classes.deleteBoard}`}
               onClick={handleDeleteBoard}
             >
               Delete Board
             </button>
-          )}
+          )} */}
         </section>
       </form>
     </dialog>,
