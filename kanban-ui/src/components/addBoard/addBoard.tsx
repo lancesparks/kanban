@@ -8,7 +8,7 @@ import {
 import { createPortal } from "react-dom";
 import classes from "./addBoard.module.css";
 import cross from "../../assets/icon-cross.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../state/store";
 import { deleteBoard } from "../../state/board-action";
 
@@ -24,6 +24,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
 ) {
   const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const modal = document.getElementById("root");
   const [currentBoardState, setCurrentBoardState] = useState(currentBoard);
   const [boardError, setBoardError] = useState(false);
@@ -104,9 +105,17 @@ const AddBoardModal = forwardRef(function AddBoardModal(
     };
   });
 
+  const getClasses = () => {
+    if (isDarkMode) {
+      return `modal ${classes.modalContainer} ${classes.modalContainerDark}`;
+    } else {
+      return `modal ${classes.modalContainer} ${classes.modalContainerLight}`;
+    }
+  };
+
   return createPortal(
     // @ts-ignore
-    <dialog className={`modal ${classes.modalContainer}`} ref={dialog}>
+    <dialog className={getClasses()} ref={dialog}>
       <form method="dialog" className={classes.modalForm}>
         <h1 className={classes.boardTitle}>
           {title}
@@ -120,7 +129,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           <input
             type="text"
             value={currentBoardState?.name || ""}
-            className={`edit_input  ${classes.modalInput}`}
+            className={`edit_input  ${classes.modalInput} ${
+              isDarkMode ? "edit_inputDark" : "edit_inputLight"
+            }`}
             onChange={handleSetTitle}
           />
         </section>
@@ -132,7 +143,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
                 <input
                   type="text"
                   value={col.title}
-                  className={`edit_input  ${classes.modalInput}`}
+                  className={`edit_input  ${classes.modalInput} ${
+                    isDarkMode ? "edit_inputDark" : "edit_inputLight"
+                  }`}
                   onChange={(e) => handleSetColumnTitle(e, col)}
                 />
                 <img
@@ -147,7 +160,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
         </section>
         <section className={classes.btnSection}>
           <button
-            className={`${classes.btn}  ${classes.addBtn}`}
+            className={`${classes.btn}  ${
+              isDarkMode ? classes.addBtnDark : classes.addBtnLight
+            }`}
             onClick={handleAddColumn}
           >
             + Add New Column
@@ -158,14 +173,6 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           >
             Save Changes
           </button>
-          {/* {currentBoard && (
-            <button
-              className={`${classes.btn} ${classes.deleteBoard}`}
-              onClick={handleDeleteBoard}
-            >
-              Delete Board
-            </button>
-          )} */}
         </section>
       </form>
     </dialog>,

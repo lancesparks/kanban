@@ -17,9 +17,7 @@
 .status_select {
   appearance: none;
   height: 4rem;
-  color: var(--white);
-  background-color: var(--darkgrey);
-  border: 1px solid var(--mediumgrey);
+
   font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.5rem;
@@ -31,6 +29,18 @@
   padding: 0 2rem;
   width: 100%;
   margin: 0px;
+}
+
+.selectDark {
+  color: var(--white);
+  background-color: var(--darkgrey);
+  border: 1px solid var(--mediumgrey);
+}
+
+.selectLight {
+  background-color: var(--white);
+  border: 1px solid var(--lineslight);
+  color: var(--black);
 }
 
 .status_select:active ~ .chevron {

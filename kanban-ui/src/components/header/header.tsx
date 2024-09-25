@@ -5,7 +5,8 @@ import { deleteBoard, updateBoard } from "../../state/board-action";
 import ConfirmDialog from "../confirmDialog/confirm-dialog";
 import AddBoardModal from "../addBoard/addBoard";
 import classes from "./header.module.css";
-import logo from "../../assets/logo-light.svg";
+import logoLight from "../../assets/logo-light.svg";
+import logoDark from "../../assets/logo-dark.svg";
 import ellipsis from "../../assets/icon-vertical-ellipsis.svg";
 import TaskDialog from "../task/task-dialog/task-dialog";
 
@@ -13,6 +14,7 @@ const Header = () => {
   const dialog = useRef<HTMLDialogElement>();
   const deleteDialog = useRef<HTMLDialogElement>();
   const dispatch = useDispatch<AppDispatch>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const currentColumns = useSelector(({ boards }: any) => boards.columns);
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const [defaultColumn, setDefaultColumn] = useState<string | null>(
@@ -109,7 +111,13 @@ const Header = () => {
   }, [currentColumns]);
 
   return (
-    <header className={classes.headerContainer}>
+    <header
+      className={
+        isDarkMode
+          ? `${classes.headerContainer} ${classes.headerContainerDark}`
+          : `${classes.headerContainer} ${classes.headerContainerLight}`
+      }
+    >
       {defaultColumn && showDialog && !showBoardMenu && (
         <TaskDialog
           defaultTask={defaultTask}
@@ -139,8 +147,18 @@ const Header = () => {
         ></ConfirmDialog>
       )}
 
-      <div className={classes.containerLogo}>
-        <img src={logo} className={classes.containerLogo_logo} alt="logo"></img>
+      <div
+        className={
+          isDarkMode
+            ? `${classes.containerLogo} ${classes.containerLogoDark}`
+            : `${classes.containerLogo} ${classes.containerLogoLight}`
+        }
+      >
+        <img
+          src={isDarkMode ? logoLight : logoDark}
+          className={classes.containerLogo_logo}
+          alt="logo"
+        ></img>
       </div>
       <div className={classes.headerContainer_actions}>
         <h1 className={classes.header}>Platform Launch</h1>
@@ -157,7 +175,14 @@ const Header = () => {
           ></img>
 
           {showBoardMenu && (
-            <section className={classes.boardMenu} onBlur={handleShowBoardMenu}>
+            <section
+              className={
+                isDarkMode
+                  ? `${classes.boardMenu} ${classes.boardMenuDark}`
+                  : `${classes.boardMenu} ${classes.boardMenuLight}`
+              }
+              onBlur={handleShowBoardMenu}
+            >
               <p className={classes.boardMenuEdit} onClick={handleEditBoard}>
                 Edit Board
               </p>

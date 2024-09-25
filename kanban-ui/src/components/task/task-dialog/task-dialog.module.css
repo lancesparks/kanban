@@ -10,3 +10,10 @@
   padding: 2rem 3rem;
   border-radius: 6px;
 }
+
+.modalContainerDark {
+  background-color: var(--darkgrey);
+}
+.modalContainerLight {
+  background-color: var(--white);
+}

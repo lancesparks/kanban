@@ -73,13 +73,14 @@ h6 {
   --headerHeight: 9.7rem;
 }
 
-body {
-  background-color: var(--verydarkgrey);
-}
-
 .main {
   display: grid;
   grid-template-columns: 30rem 7fr;
+  transition: 0.4s;
+}
+
+.mainSidebarClosed {
+  grid-template-columns: 0rem 7fr !important;
 }
 
 aside {

@@ -5,9 +5,15 @@
   border: none;
   outline: none;
   box-shadow: none;
-  background-color: var(--darkgrey);
   color: var(--white);
   padding: 2rem 4rem;
+}
+
+.modalContainerDark {
+  background-color: var(--darkgrey);
+}
+.modalContainerLight {
+  background-color: var(--white);
 }
 
 .modalForm {
@@ -37,7 +43,6 @@ section {
 .modalContainer,
 h1 {
   font-size: var(--headerL);
-  margin-bottom: 2rem;
 }
 
 .modalContainer,
@@ -48,13 +53,8 @@ h3 {
 
 .modalInput {
   width: 100%;
-
-  background-color: var(--darkgrey);
-
   font-size: var(--headerS);
-  border: 1px solid var(--mediumgrey);
   height: 3rem;
-  color: var(--white);
 }
 
 .modalInput:focus {
@@ -78,14 +78,6 @@ h3 {
   width: 100%;
   bottom: 0.05rem;
   display: grid;
-}
-
-.addBtn {
-  color: var(--mainpurple);
-  background-color: var(--white);
-}
-.addBtn:hover {
-  background-color: var(--lineslight);
 }
 
 .saveChanges {
@@ -115,4 +107,22 @@ h3 {
 
 .deleteBoard:hover {
   background-color: var(--redhover);
+}
+
+.addBtnDark {
+  color: var(--mainpurple);
+  background-color: var(--white);
+}
+
+.addBtnDark:hover {
+  background-color: var(--lineslight);
+}
+
+.addBtnLight {
+  color: var(--mainpurple);
+  background-color: var(--lineslight);
+}
+
+.addBtnLight:hover {
+  background-color: var(--mainpurplehover) !important;
 }

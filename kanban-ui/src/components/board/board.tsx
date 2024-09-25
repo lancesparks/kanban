@@ -10,6 +10,7 @@ import EmptyBoard from "../emptyBoard/EmptyBoard";
 const Board = () => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const columns = useSelector(({ boards }: any) => boards.columns);
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
 
@@ -66,8 +67,16 @@ const Board = () => {
             </section>
           );
         })}
+
       {columns?.length > 0 && (
-        <section className={classes.addColumnSection} onClick={handleDialog}>
+        <section
+          className={
+            isDarkMode
+              ? `${classes.addColumnSection} ${classes.addColumnSectionDark}`
+              : `${classes.addColumnSection} ${classes.addColumnSectionLight}`
+          }
+          onClick={handleDialog}
+        >
           <h1 className="headingXL"> + Add / Edit Columns</h1>
         </section>
       )}

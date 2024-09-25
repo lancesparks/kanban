@@ -1,15 +1,7 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import classes from "./confirm-dialog.module.css";
 import { createPortal } from "react-dom";
-
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../state/store";
+import { useSelector } from "react-redux";
 
 interface ConfirmDialogProps {
   dialogTitle: string;
@@ -29,6 +21,7 @@ const ConfirmDialog = forwardRef(function ConfirmDialog(
 ) {
   const dialog = useRef<HTMLDialogElement>();
   const modal = document.getElementById("root");
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
 
   useImperativeHandle(ref, () => {
     return {
@@ -43,9 +36,17 @@ const ConfirmDialog = forwardRef(function ConfirmDialog(
     handleCloseDialog();
   };
 
+  const getClasses = () => {
+    if (isDarkMode) {
+      return `modal ${classes.modalContainer} ${classes.dark}`;
+    } else {
+      return `modal ${classes.modalContainer} ${classes.light}`;
+    }
+  };
+
   return createPortal(
     // @ts-ignore
-    <dialog ref={dialog} className={`modal ${classes.modalContainer} `}>
+    <dialog ref={dialog} className={getClasses()}>
       <div className={classes.modalContent}>
         <div>
           <h1 className={classes.modalTitle}>{dialogTitle}</h1>

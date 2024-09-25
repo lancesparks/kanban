@@ -4,11 +4,12 @@ import hideIcon from "../../assets/icon-hide-sidebar.svg";
 import lightTheme from "../../assets/icon-light-theme.svg";
 import darkTheme from "../../assets/icon-dark-theme.svg";
 import AddBoardModal from "../addBoard/addBoard";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { AppDispatch } from "../../state/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBoard } from "../../state/board-action";
 import { IBoard } from "../../interfaces";
+import { boardActions } from "../../state/boardSlice";
 
 const SideBar = ({
   boardTypes,
@@ -18,6 +19,11 @@ const SideBar = ({
 }: any) => {
   const dialog = useRef<HTMLDialogElement>();
   const dispatch = useDispatch<AppDispatch>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+
+  const handleSetIsDarkMode = () => {
+    dispatch(boardActions.toggleDarkMode(!isDarkMode));
+  };
 
   const handleDialog = (e: any) => {
     if (dialog.current) {
@@ -46,14 +52,22 @@ const SideBar = ({
     dispatch(createBoard(newBoard));
   };
 
+  const getSideBarClasses = () => {
+    if (isDarkMode) {
+      return hideSideBar
+        ? `${classes.sidebarContainer} ${classes.hideSideBar} ${classes.sidebarContainerDark}`
+        : `${classes.sidebarContainer} ${classes.showSideBar} ${classes.sidebarContainerDark}`;
+    }
+
+    if (!isDarkMode) {
+      return hideSideBar
+        ? `${classes.sidebarContainer} ${classes.hideSideBar} ${classes.sidebarContainerLight}`
+        : `${classes.sidebarContainer} ${classes.showSideBar} ${classes.sidebarContainerLight}`;
+    }
+  };
+
   return (
-    <div
-      className={
-        hideSideBar
-          ? `${classes.sidebarContainer} ${classes.hideSideBar}`
-          : `${classes.sidebarContainer} ${classes.showSideBar}`
-      }
-    >
+    <div className={getSideBarClasses()}>
       <AddBoardModal
         title={"Add New Board"}
         currentBoard={null}
@@ -82,11 +96,21 @@ const SideBar = ({
 
       <div className={classes.settingsContainer}>
         <div className="settings">
-          <div className={classes.modeControl}>
+          <div
+            className={
+              isDarkMode
+                ? `${classes.modeControl} ${classes.modeControlDark}`
+                : `${classes.modeControl} ${classes.modeControlLight}`
+            }
+          >
             <div className={classes.switches}>
               <img src={lightTheme} alt="" className={classes.lightTheme} />
               <label className={classes.switch}>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={isDarkMode}
+                  onChange={handleSetIsDarkMode}
+                />
                 <span className={`${classes.slider} ${classes.round}`}></span>
               </label>
               <img src={darkTheme} alt="" className={classes.darkTheme} />

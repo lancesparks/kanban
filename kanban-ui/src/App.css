@@ -1,3 +1,15 @@
+.AppDark {
+  height: 100vh;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--verydarkgrey);
+}
+
+.AppLight {
+  height: 100vh;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--white);
+}
+
 .modal {
   position: absolute;
   top: 50%;
@@ -6,10 +18,18 @@
 }
 
 .mainContainer {
-  height: 90vh;
   display: flex;
   padding: 2rem 4rem;
   overflow-y: auto;
+  transition: all 0.5s ease-in-out;
+}
+
+.mainContainerDark {
+  background-color: var(--verydarkgrey);
+}
+
+.mainContainerLight {
+  background-color: var(--lineslight);
 }
 
 .headingXL {
@@ -24,9 +44,7 @@ dialog:-internal-dialog-in-top-layer::backdrop {
 
 .edit_input {
   appearance: none;
-  color: var(--white);
-  background-color: var(--darkgrey);
-  border: 1px solid var(--mediumgrey);
+
   font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.5rem;
@@ -37,6 +55,18 @@ dialog:-internal-dialog-in-top-layer::backdrop {
   cursor: pointer;
   width: 100%;
   margin: 0px;
+}
+
+.edit_inputDark {
+  background-color: var(--darkgrey);
+  border: 1px solid var(--mediumgrey);
+  color: var(--white);
+}
+
+.edit_inputLight {
+  background-color: var(--white);
+  border: 1px solid var(--lineslight);
+  color: var(--black);
 }
 
 .showSideBar {

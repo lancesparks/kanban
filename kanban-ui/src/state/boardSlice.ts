@@ -9,6 +9,7 @@ export interface BoardState {
   selectedTask: ITask | null;
   selectedBoard: any | null;
   statuses: string[];
+  isDarkMode: boolean;
 }
 
 const initialState: BoardState = {
@@ -19,6 +20,7 @@ const initialState: BoardState = {
   selectedTask: null,
   selectedBoard: null,
   statuses: [],
+  isDarkMode: true,
 };
 
 export const boardSlice = createSlice({
@@ -117,6 +119,9 @@ export const boardSlice = createSlice({
         })
         .sort((a: any, b: any) => a.ID - b.ID);
       state.selectedTask = { ...currentTask };
+    },
+    toggleDarkMode: (state, action: PayloadAction<boolean>) => {
+      state.isDarkMode = action.payload;
     },
   },
 });

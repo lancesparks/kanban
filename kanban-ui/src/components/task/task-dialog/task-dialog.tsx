@@ -26,6 +26,7 @@ const TaskDialog = forwardRef(function TaskDialog(
 ) {
   const dialog = useRef<HTMLDialogElement>();
   const modal = document.getElementById("root");
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const dispatch = useDispatch<AppDispatch>();
   const selectedTask = useSelector(({ boards }: any) => boards?.selectedTask);
   const selectedBoard = useSelector(({ boards }: any) => boards?.selectedBoard);
@@ -59,9 +60,17 @@ const TaskDialog = forwardRef(function TaskDialog(
     setTaskError(err);
   };
 
+  const getClasses = () => {
+    if (isDarkMode) {
+      return `modal ${classes.modalContainer} ${classes.modalContainerDark}`;
+    } else {
+      return `modal ${classes.modalContainer} ${classes.modalContainerLight}`;
+    }
+  };
+
   return createPortal(
     // @ts-ignore
-    <dialog ref={dialog} className={`modal ${classes.modalContainer}`}>
+    <dialog ref={dialog} className={getClasses()}>
       <form className={classes.taskForm} method="dialog">
         {!editMode && !addTask && (
           <TaskInfo

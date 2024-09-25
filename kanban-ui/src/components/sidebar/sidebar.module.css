@@ -1,11 +1,21 @@
 .sidebarContainer {
-  color: var(--mediumgrey);
-  background-color: var(--darkgrey);
   height: 100%;
   display: grid;
   overflow-y: auto;
   position: relative;
   transition: all 0.5s ease-in-out;
+  color: var(--mediumgrey);
+  overflow-x: hidden;
+}
+
+.sidebarContainerDark {
+  background-color: var(--darkgrey);
+  border-right: 1px solid var(--linesdark);
+}
+
+.sidebarContainerLight {
+  background-color: var(--white);
+  border-right: 1px solid var(--lineslight);
 }
 
 .sidebarContainer * {
@@ -34,9 +44,17 @@
   display: flex;
   justify-content: center;
   padding: 1rem 4rem;
-  background: var(--verydarkgrey);
+
   margin: 2rem 4rem;
   border-radius: 4px;
+}
+
+.modeControlDark {
+  background: var(--verydarkgrey);
+}
+
+.modeControlLight {
+  background: var(--lineslight);
 }
 
 .hideContainer {

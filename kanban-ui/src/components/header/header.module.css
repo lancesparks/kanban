@@ -1,15 +1,32 @@
 .headerContainer {
-  color: var(--white);
   display: flex;
-  background-color: var(--darkgrey);
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.5s ease-in-out;
+}
+
+.headerContainerDark {
+  background-color: var(--darkgrey);
+  color: var(--white);
   border-bottom: 1px solid var(--linesdark);
 }
 
-.header {
+.headerContainerDark h1 {
   color: var(--white);
+}
+
+.headerContainerLight {
+  background-color: var(--white);
+  border-bottom: 1px solid var(--lineslight);
+  color: var(--black);
+}
+
+.headerContainerLight h1 {
+  color: var(--black);
+}
+
+.header {
   font-size: var(--headerXL);
   border-right: var(--linesdark);
 }
@@ -17,10 +34,17 @@
 .containerLogo {
   display: flex;
   height: 9.7rem;
-  border-right: 1px solid var(--linesdark);
   align-items: center;
   padding: 0rem 4rem;
   width: 30rem;
+  transition: all 0.5s ease-in-out;
+}
+
+.containerLogoDark {
+  border-right: 1px solid var(--linesdark);
+}
+.containerLogoLight {
+  border-right: 1px solid var(--lineslight);
 }
 
 .containerLogo_logo {
@@ -49,10 +73,17 @@
   top: 7rem;
   right: 0px;
   font-size: 2rem;
-  background: black;
   padding: 1rem 2rem;
   font-weight: bold;
   border-radius: 8px;
+}
+
+.boardMenuDark {
+  background-color: var(--white);
+}
+
+.boardMenuLight {
+  background-color: var(--white);
 }
 
 .boardMenuEdit {

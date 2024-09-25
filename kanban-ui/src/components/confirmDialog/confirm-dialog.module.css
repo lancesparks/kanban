@@ -4,10 +4,18 @@
   border: none;
   outline: none;
   box-shadow: none;
-  background-color: var(--darkgrey);
+
   color: var(--white);
   padding: 2rem 3rem;
   border-radius: 6px;
+}
+
+.dark {
+  background-color: var(--darkgrey);
+}
+
+.light {
+  background-color: var(--white);
 }
 
 .modalContent {

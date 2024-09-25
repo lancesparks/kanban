@@ -22,6 +22,7 @@ const ItemSelect = ({
   const dispatch = useDispatch<AppDispatch>();
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const taskStatuses = useSelector(({ boards }: any) => boards.boardStatuses);
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
 
   const [selected, setSelected] = useState(
     taskStatuses.find((status: any) => +status.ID === +task.column_id)
@@ -51,7 +52,9 @@ const ItemSelect = ({
       <p className={classes.status_container_header}>{title}</p>
       <span className={classes.select_container}>
         <select
-          className={classes.status_select}
+          className={`${classes.status_select} ${
+            isDarkMode ? classes.selectDark : classes.selectLight
+          }`}
           value={selected?.ID!}
           onChange={(e) =>
             !isEditMode

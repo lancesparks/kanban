@@ -12,6 +12,8 @@ import showIcon from "./assets/icon-show-sidebar.svg";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+
   const boards = useSelector(({ boards }: any) => boards.boards);
   const [selectedBoardID, setSelectedBoardID] = useState(boards[0]?.ID);
   const [hideSideBar, setHideSideBar] = useState(false);
@@ -42,9 +44,12 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={isDarkMode ? `App AppDark` : `App AppLight`}>
       <Header></Header>
-      <main className="main">
+      <main
+        // className="main"
+        className={!hideSideBar ? "main" : "main mainSidebarClosed"}
+      >
         <aside>
           <Sidebar
             boardTypes={boards}
@@ -64,7 +69,14 @@ function App() {
             <img src={showIcon} alt="" />
           </div>
         </aside>
-        <div className="mainContainer" id="mainContainer">
+        <div
+          className={
+            isDarkMode
+              ? `mainContainer mainContainerDark`
+              : `mainContainer mainContainerLight`
+          }
+          id="mainContainer"
+        >
           {boards?.map((board: IBoard) => {
             if (board.ID === selectedBoardID) {
               return <Board key={board.ID} />;

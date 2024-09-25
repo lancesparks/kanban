@@ -29,6 +29,8 @@ const TaskEdit = ({
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const dispatch = useDispatch<AppDispatch>();
   const deleteDialog = useRef<HTMLDialogElement>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(true);
   const [updatedTask, setUpdatedTask] = useState<ITask>(task);
 
@@ -163,7 +165,9 @@ const TaskEdit = ({
       <section className={classes.taskEdit_title}>
         <h3>Title</h3>
         <input
-          className={"edit_input"}
+          className={`edit_input   ${
+            isDarkMode ? "edit_inputDark" : "edit_inputLight"
+          }`}
           value={updatedTask?.title as string}
           onChange={handleSetTitle}
           type="text"
@@ -172,7 +176,9 @@ const TaskEdit = ({
       <section className={classes.taskEdit_description}>
         <h3>Description</h3>
         <textarea
-          className={"edit_input"}
+          className={`edit_input   ${
+            isDarkMode ? "edit_inputDark" : "edit_inputLight"
+          }`}
           name=""
           id=""
           cols={30}
@@ -198,7 +204,11 @@ const TaskEdit = ({
             );
           })}
         <a
-          className={`${classes.taskEdit_button} ${classes.subtaskBtn}`}
+          className={`${classes.taskEdit_button} ${classes.subtaskBtn} ${
+            isDarkMode
+              ? `${classes.subtaskBtnDark}`
+              : `${classes.subtaskBtnLight}`
+          }`}
           onClick={handleAddSubTask}
         >
           + Add New Task

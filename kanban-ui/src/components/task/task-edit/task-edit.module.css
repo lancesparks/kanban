@@ -19,9 +19,20 @@
 }
 
 .subtaskBtn {
-  background-color: var(--white);
   color: var(--mainpurple);
   cursor: pointer;
+}
+
+.subtaskBtnDark {
+  background-color: var(--white);
+}
+
+.subtaskBtnLight {
+  background-color: var(--lineslight);
+}
+
+.subtaskBtnLight:hover {
+  background-color: var(--mainpurplehover) !important;
 }
 
 .btnControl {
@@ -75,4 +86,5 @@ textarea {
 
 .taskEditTitle {
   display: grid;
+  margin-bottom: 2rem;
 }
