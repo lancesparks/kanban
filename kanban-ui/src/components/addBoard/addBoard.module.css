@@ -5,15 +5,20 @@
   border: none;
   outline: none;
   box-shadow: none;
-  color: var(--white);
+
   padding: 2rem 4rem;
 }
 
 .modalContainerDark {
   background-color: var(--darkgrey);
 }
+
 .modalContainerLight {
   background-color: var(--white);
+}
+
+.modalContainerLight h3 {
+  color: var(--mediumgrey) !important;
 }
 
 .modalForm {

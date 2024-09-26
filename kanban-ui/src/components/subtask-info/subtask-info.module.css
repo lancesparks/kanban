@@ -1,14 +1,22 @@
+.dark {
+  background: var(--verydarkgrey);
+}
+
+.light {
+  background-color: var(--lineslightgrey);
+}
+
+.light p {
+  color: var(--mediumgrey);
+}
+
 .subtask {
   display: flex;
   width: 100%;
   padding: 1rem 2rem;
-  background: var(--verydarkgrey);
   position: relative;
   align-items: center;
   align-content: center;
-}
-
-.subtask input {
 }
 
 .subtask_info {
@@ -48,7 +56,6 @@
   left: 0;
   height: 2rem;
   width: 2rem;
-  background-color: var(--darkgrey);
   transition: ease-in-out 0.25s;
   transform: translateY(-25%);
   border: 1px solid #828fa3;

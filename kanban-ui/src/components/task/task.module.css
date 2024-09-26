@@ -1,16 +1,30 @@
 .taskContainer {
-  background-color: var(--darkgrey);
-  color: var(--white);
   border-radius: 0.4rem;
   width: 28rem;
   padding: 2rem;
   cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.taskContainerDark {
+  background-color: var(--darkgrey);
+  color: var(--white);
+}
+
+.taskContainerLight {
+  background-color: var(--white);
+  color: var(--mediumgrey);
+}
+
+.taskContainerLight h3 {
+  color: var(--mediumgrey);
 }
 
 .taskTitle {
   font-size: 1.5rem;
   font-weight: bold;
   line-height: 1.9rem;
+  transition: all 0.5s ease-in-out;
 }
 
 .subtasks {

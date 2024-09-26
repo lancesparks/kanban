@@ -110,6 +110,10 @@
   height: 65%;
 }
 
+button {
+  transition: all 0.5s ease-in-out;
+}
+
 .addBtn {
   color: var(--white);
   font-size: var(--headerM);
@@ -125,4 +129,16 @@
 
 .addBtn:hover {
   background-color: var(--mainpurplehover);
+}
+
+.addBtnDisabled {
+  background-color: var(--mainpurple);
+  color: var(--white);
+  font-size: var(--headerM);
+  height: var(--btnHeight);
+  width: var(--btnWidth);
+  border-radius: 2.4rem;
+  border: none;
+  box-shadow: none;
+  opacity: 0.5;
 }

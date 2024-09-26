@@ -40,7 +40,11 @@
 .selectLight {
   background-color: var(--white);
   border: 1px solid var(--lineslight);
-  color: var(--black);
+  color: var(--mediumgrey);
+}
+
+.selectLight .item {
+  color: var(--mediumgrey);
 }
 
 .status_select:active ~ .chevron {

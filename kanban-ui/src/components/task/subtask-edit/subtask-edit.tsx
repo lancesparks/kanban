@@ -4,6 +4,7 @@ import classes from "./subtask-edit.module.css";
 import ItemSelect from "../../item-select/item-select";
 import cross from "../../../assets/icon-cross.svg";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 interface SubTaskEditProps {
   ID: number;
@@ -16,14 +17,20 @@ interface SubTaskEditProps {
 
 const SubTaskEdit = ({
   ID,
-  task_id,
   title,
-  isCompleted,
   handleUpdateSubTasks,
   handleDeleteSubTasks,
 }: SubTaskEditProps) => {
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+
   return (
-    <section className={classes.taskEdit_subtaskContainer}>
+    <section
+      className={
+        isDarkMode
+          ? `${classes.taskEdit_subtaskContainer} ${classes.dark}`
+          : `${classes.taskEdit_subtaskContainer} ${classes.light}`
+      }
+    >
       <input
         className={`edit_input ${classes.subtaskInput}`}
         type="text"

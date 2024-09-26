@@ -35,6 +35,7 @@ const Header = () => {
 
   const [defaultTask, setDefaultTask] = useState<any>(blankTask);
 
+  console.log(currentColumns);
   const handleSaveChanges = (currentBoardState: any, columns: any) => {
     if (!currentBoard) {
       return;
@@ -120,7 +121,7 @@ const Header = () => {
     >
       {defaultColumn && showDialog && !showBoardMenu && (
         <TaskDialog
-          defaultTask={defaultTask}
+          defaultTask={blankTask}
           editMode={false}
           handleCloseDialog={handleCloseDialog}
           addTask={true}
@@ -164,7 +165,15 @@ const Header = () => {
         <h1 className={classes.header}>Platform Launch</h1>
 
         <div className={classes.action_container}>
-          <button className={classes.addBtn} onClick={handleAddNewTask}>
+          <button
+            className={
+              currentColumns.length === 0
+                ? classes.addBtnDisabled
+                : classes.addBtn
+            }
+            onClick={handleAddNewTask}
+            disabled={currentColumns.length === 0}
+          >
             + Add New Task
           </button>
           <img

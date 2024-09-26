@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import classes from "./task.module.css";
 import TaskDialog from "./task-dialog/task-dialog";
 import { ISubtask } from "../../interfaces";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../state/store";
 import { boardActions } from "../../state/boardSlice";
 
 const Task = ({ task }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-
   const dialog = useRef<HTMLDialogElement>();
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const [editMode, setEditMode] = useState(false);
   const [subtaskStatus, setSubtaskStatus] = useState({
     count: 0,
@@ -57,7 +57,14 @@ const Task = ({ task }: any) => {
   };
 
   return (
-    <section className={classes.taskContainer} onClick={handleDialog}>
+    <section
+      className={
+        isDarkMode
+          ? `${classes.taskContainer} ${classes.taskContainerDark}`
+          : `${classes.taskContainer} ${classes.taskContainerLight}`
+      }
+      onClick={handleDialog}
+    >
       <h3 className={classes.taskTitle}>{task.title}</h3>
       <p className={classes.subtasks}>
         {subtaskStatus.completed} of {subtaskStatus.count} subtasks

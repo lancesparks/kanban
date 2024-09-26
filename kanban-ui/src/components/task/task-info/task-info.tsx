@@ -24,6 +24,7 @@ const TaskInfo = ({
     count: 0,
     completed: 0,
   });
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
 
   useEffect(() => {
     if (!task) {
@@ -62,7 +63,13 @@ const TaskInfo = ({
     <div className={classes.taskInfo_container}>
       {task && (
         <>
-          <section className="taskInfo">
+          <section
+            className={
+              isDarkMode
+                ? `${classes.taskInfo} ${classes.taskInfoDark}`
+                : `${classes.taskInfo} ${classes.taskInfoLight}`
+            }
+          >
             <h1 className={classes.taskInfo_title}>
               {task.title}
               <span
@@ -74,7 +81,13 @@ const TaskInfo = ({
             </h1>
             <p className={classes.taskInfo_description}>{task.description}</p>
             {showEditTaskMenu && (
-              <div className={classes.taskEdit_menu}>
+              <div
+                className={
+                  isDarkMode
+                    ? `${classes.taskEdit_menu} ${classes.menuDark}`
+                    : `${classes.taskEdit_menu} ${classes.menuLight}`
+                }
+              >
                 <p onClick={() => handleEditMode()}>Edit Task</p>
               </div>
             )}

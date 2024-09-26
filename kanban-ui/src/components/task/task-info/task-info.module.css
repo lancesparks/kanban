@@ -3,8 +3,15 @@
   grid-template-rows: 1fr 3fr 1fr;
 }
 
-.taskInfo_title {
+.taskInfoDark .taskInfo_title {
   color: var(--white);
+}
+
+.taskInfoLight .taskInfo_title {
+  color: var(--mediumgrey);
+}
+
+.taskInfo_title {
   font-size: var(--headerL);
   font-weight: bold;
   display: flex;
@@ -21,7 +28,7 @@
   display: flex;
   top: 3rem;
   right: 5rem;
-  background-color: var(--verydarkgrey);
+
   border-radius: 4px;
   padding: 2rem;
   flex-direction: column;
@@ -62,4 +69,16 @@
   position: relative;
   align-items: center;
   height: 4rem;
+}
+
+.menuDark {
+  background-color: var(--verydarkgrey);
+}
+
+.menuLight {
+  background-color: var(--lineslightgrey);
+}
+
+.menuLight p {
+  color: var(--mediumgrey);
 }

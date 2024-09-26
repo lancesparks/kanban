@@ -63,7 +63,7 @@ const ItemSelect = ({
           }
         >
           {taskStatuses.map((status: any, index: number) => (
-            <option key={index} value={status.ID}>
+            <option key={index} value={status.ID} className="item">
               {status.status}
             </option>
           ))}

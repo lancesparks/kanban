@@ -14,3 +14,16 @@
   margin-left: 2rem;
   cursor: pointer;
 }
+
+.light input {
+  border: 1px solid var(--lineslight) !important;
+  background-color: var(--white);
+
+  color: var(--mediumgrey);
+}
+
+.dark input {
+  background-color: var(--darkgrey);
+  border: 1px solid var(--mediumgrey);
+  color: var(--white);
+}

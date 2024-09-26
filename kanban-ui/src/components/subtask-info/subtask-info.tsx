@@ -10,8 +10,16 @@ const SubTaskInfo = ({ task_id, subtask }: any) => {
     dispatch(updateSubTask(subtask));
   };
 
+  const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+
   return (
-    <section className={classes.subtask}>
+    <section
+      className={
+        isDarkMode
+          ? `${classes.subtask} ${classes.dark}`
+          : `${classes.subtask} ${classes.light}`
+      }
+    >
       <label className={classes.container}>
         <input
           type="checkbox"
@@ -23,7 +31,13 @@ const SubTaskInfo = ({ task_id, subtask }: any) => {
             })
           }
         />
-        <span className={classes.subtask_checkbox}></span>
+        <span
+          className={
+            isDarkMode
+              ? `${classes.subtask_checkbox} ${classes.dark}`
+              : `${classes.subtask_checkbox} ${classes.light}`
+          }
+        ></span>
       </label>
 
       <p className={classes.subtask_info}>{subtask.title}</p>
