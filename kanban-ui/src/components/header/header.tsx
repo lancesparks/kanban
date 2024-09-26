@@ -35,7 +35,6 @@ const Header = () => {
 
   const [defaultTask, setDefaultTask] = useState<any>(blankTask);
 
-  console.log(currentColumns);
   const handleSaveChanges = (currentBoardState: any, columns: any) => {
     if (!currentBoard) {
       return;

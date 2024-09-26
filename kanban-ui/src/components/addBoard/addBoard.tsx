@@ -38,7 +38,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
 
   useEffect(() => {
     if (!currentBoard?.columns && mostRecentColumn) {
-      setColumns([{ tempID: mostRecentColumn.ID + 1, title: "" }]);
+      setColumns([{ tempID: mostRecentColumn?.ID + 1, title: "" }]);
     }
 
     if (!currentBoard?.columns && !mostRecentColumn) {
@@ -48,7 +48,7 @@ const AddBoardModal = forwardRef(function AddBoardModal(
     if (currentBoard?.columns && mostRecentColumn) {
       setColumns([
         ...currentBoard?.columns,
-        { tempID: mostRecentColumn.ID + 1, title: "" },
+        { tempID: mostRecentColumn?.ID + 1, title: "" },
       ]);
     }
 
@@ -68,6 +68,9 @@ const AddBoardModal = forwardRef(function AddBoardModal(
     const updatedCol = { ...col, title: e.target.value };
     setColumns((prev: any) => {
       return prev.map((col: any) => {
+        if (col.tempID === updatedCol.tempID) {
+          return updatedCol;
+        }
         if (col.ID === updatedCol.ID) {
           return updatedCol;
         }
@@ -86,14 +89,19 @@ const AddBoardModal = forwardRef(function AddBoardModal(
       if (prev.length === 0 && !mostRecentColumn) {
         return [{ tempID: 1, title: "" }];
       }
-
-      return [...prev, { tempID: prev.slice(-1)[0].ID + 1, title: "" }];
+      return [...prev, { tempID: prev.slice(-1)[0].tempID + 1, title: "" }];
     });
   };
 
   const handleDeleteColumn = (col: any) => {
     setColumns((prev: any) => {
-      return prev.filter((c: any) => c.ID !== col.ID);
+      return prev.filter((c: any) => {
+        if (col.tempID && c.tempID) {
+          return c.tempID !== col.tempID;
+        }
+
+        return c.ID !== col.ID;
+      });
     });
   };
 
@@ -176,7 +184,10 @@ const AddBoardModal = forwardRef(function AddBoardModal(
           {columns &&
             columns?.map((col: any, index: any) => {
               return (
-                <div className={classes.boardColumn} key={col.tempID || col.ID}>
+                <div
+                  className={classes.boardColumn}
+                  key={col.tempID ? col.tempID : col.ID}
+                >
                   <input
                     type="text"
                     value={col.title}

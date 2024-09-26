@@ -76,10 +76,11 @@
   padding: 1rem 2rem;
   font-weight: bold;
   border-radius: 8px;
+  transition: all 0.5s ease-in-out;
 }
 
 .boardMenuDark {
-  background-color: var(--white);
+  background-color: var(--darkgrey);
 }
 
 .boardMenuLight {
