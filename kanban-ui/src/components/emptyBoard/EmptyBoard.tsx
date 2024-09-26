@@ -50,10 +50,7 @@ const EmptyBoard = ({ currentBoard }: any) => {
       />
       <div className={classes.emptyBoardContainerMain}>
         <h1>This board is empty. Create a new column to get started.</h1>
-        <button
-          className={`${classes.btn}  ${classes.addBtn}`}
-          onClick={handleDialog}
-        >
+        <button className={`${classes.addBtn}`} onClick={handleDialog}>
           + Add New Column
         </button>
       </div>

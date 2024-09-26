@@ -109,6 +109,7 @@
 .ellipsis {
   cursor: pointer;
   height: 65%;
+  margin-left: 2rem;
 }
 
 button {
