@@ -102,8 +102,6 @@ export const boardSlice = createSlice({
 
       state.columns = state.columns
         .map((col) => {
-          // console.log(JSON.stringify(currentTask, null, 2));
-
           if (col.ID === currentTask.column_id) {
             return {
               ...col,

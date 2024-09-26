@@ -4,7 +4,9 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  useId,
 } from "react";
+
 import { createPortal } from "react-dom";
 import classes from "./addBoard.module.css";
 import cross from "../../assets/icon-cross.svg";
@@ -24,18 +26,34 @@ const AddBoardModal = forwardRef(function AddBoardModal(
 ) {
   const dispatch = useDispatch<AppDispatch>();
   const dialog = useRef<HTMLDialogElement>();
+  const mostRecentColumn = useSelector(
+    ({ boards }: any) => boards?.columns.slice(-1)[0]
+  );
+  const boardColumns = useSelector(({ boards }: any) => boards?.columns);
   const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
   const modal = document.getElementById("root");
   const [currentBoardState, setCurrentBoardState] = useState(currentBoard);
   const [boardError, setBoardError] = useState(false);
-  const [columns, setColumns] = useState<any[]>(
-    currentBoardState ? currentBoardState.columns : [{ title: "" }]
-  );
+  const [columns, setColumns] = useState<any[]>([]);
 
   useEffect(() => {
+    if (!currentBoard?.columns && mostRecentColumn) {
+      setColumns([{ tempID: mostRecentColumn.ID + 1, title: "" }]);
+    }
+
+    if (!currentBoard?.columns && !mostRecentColumn) {
+      setColumns([{ tempID: 1, title: "" }]);
+    }
+
+    if (currentBoard?.columns && mostRecentColumn) {
+      setColumns([
+        ...currentBoard?.columns,
+        { tempID: mostRecentColumn.ID + 1, title: "" },
+      ]);
+    }
+
     setCurrentBoardState(currentBoard);
-    setColumns(currentBoard?.columns);
-  }, [currentBoard]);
+  }, [boardColumns]);
 
   const handleSetTitle = (e: any) => {
     setCurrentBoardState((prev: any) => {
@@ -61,13 +79,15 @@ const AddBoardModal = forwardRef(function AddBoardModal(
   const handleAddColumn = (e: any) => {
     e.preventDefault();
     setColumns((prev: any) => {
-      if (!prev) {
-        return [{ title: "" }];
+      if (prev.length === 0 && mostRecentColumn) {
+        return [{ tempID: mostRecentColumn.ID + 1, title: "" }];
       }
-      const newColumn = {
-        title: "",
-      };
-      return [...prev, newColumn];
+
+      if (prev.length === 0 && !mostRecentColumn) {
+        return [{ tempID: 1, title: "" }];
+      }
+
+      return [...prev, { tempID: prev.slice(-1)[0].ID + 1, title: "" }];
     });
   };
 
@@ -83,9 +103,24 @@ const AddBoardModal = forwardRef(function AddBoardModal(
       setBoardError(true);
       return;
     }
-    setBoardError(false);
-    handleSaveChanges(currentBoardState, columns);
+
+    const tempColumns = columns.map((col) => {
+      if (col.ID) {
+        return {
+          ID: col.ID,
+          title: col.title.toUpperCase(),
+        };
+      } else {
+        return {
+          title: col.title.toUpperCase(),
+        };
+      }
+    });
+
+    handleSaveChanges(currentBoardState, tempColumns);
+
     setCurrentBoardState(null);
+    setBoardError(false);
   };
 
   const handleDeleteBoard = (e: any) => {
@@ -137,26 +172,28 @@ const AddBoardModal = forwardRef(function AddBoardModal(
         </section>
         <section>
           <h3>Board Columns</h3>
-          {columns?.map((col: any, index: any) => {
-            return (
-              <div className={classes.boardColumn} key={index}>
-                <input
-                  type="text"
-                  value={col.title}
-                  className={`edit_input  ${classes.modalInput} ${
-                    isDarkMode ? "edit_inputDark" : "edit_inputLight"
-                  }`}
-                  onChange={(e) => handleSetColumnTitle(e, col)}
-                />
-                <img
-                  src={cross}
-                  className={`${classes.removeBoardColumn} ${classes.cross}`}
-                  alt=""
-                  onClick={() => handleDeleteColumn(col)}
-                />
-              </div>
-            );
-          })}
+
+          {columns &&
+            columns?.map((col: any, index: any) => {
+              return (
+                <div className={classes.boardColumn} key={col.tempID || col.ID}>
+                  <input
+                    type="text"
+                    value={col.title}
+                    className={`edit_input  ${classes.modalInput} ${
+                      isDarkMode ? "edit_inputDark" : "edit_inputLight"
+                    }`}
+                    onChange={(e) => handleSetColumnTitle(e, col)}
+                  />
+                  <img
+                    src={cross}
+                    className={`${classes.removeBoardColumn} ${classes.cross}`}
+                    alt=""
+                    onClick={() => handleDeleteColumn(col)}
+                  />
+                </div>
+              );
+            })}
         </section>
         <section className={classes.btnSection}>
           <button
