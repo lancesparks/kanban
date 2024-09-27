@@ -17,7 +17,6 @@ const Task = ({ task }: any) => {
   });
 
   const handleDialog = (e: any) => {
-    dispatch(boardActions.setSelectedTask(task));
     if (dialog.current) {
       // @ts-ignore
       dialog.current.open();

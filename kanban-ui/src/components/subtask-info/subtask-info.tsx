@@ -3,11 +3,20 @@ import classes from "./subtask-info.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../state/store";
-import { updateSubTask } from "../../state/board-action";
-const SubTaskInfo = ({ task_id, subtask }: any) => {
+import { updateTask } from "../../state/board-action";
+const SubTaskInfo = ({ task, subtask }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const handleSetSubTaskStatus = (subtask: any) => {
-    dispatch(updateSubTask(subtask));
+  const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
+
+  const handleSetSubTaskStatus = (updatedSubtask: any) => {
+    const taskToUpdate = {
+      ...task,
+      subtasks: task.subtasks.map((subtask: any) =>
+        subtask.ID === updatedSubtask.ID ? updatedSubtask : subtask
+      ),
+    };
+
+    dispatch(updateTask(taskToUpdate, currentBoard.ID));
   };
 
   const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);

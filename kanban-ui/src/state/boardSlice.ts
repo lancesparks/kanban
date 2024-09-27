@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import { ISubtask, ITask, IColumnStatus } from "../interfaces";
 import { createBoard, updateBoard } from "./board-action";
 export interface BoardState {
@@ -87,36 +87,21 @@ export const boardSlice = createSlice({
     updateTasks: (state, action: PayloadAction<any>) => {
       let updatedTask = { ...action.payload.task };
       state.columns = [
-        ...action.payload.columns.sort((a: any, b: any) => a.ID - b.ID),
-      ];
-      state.selectedTask = { ...updatedTask };
-    },
-    updateSubtasks: (state, action: PayloadAction<ISubtask[]>) => {
-      let subtasks = action.payload;
-
-      let currentTask: any = state.tasks.filter(
-        (task) => task.ID == subtasks[0].task_id
-      )[0];
-
-      currentTask = { ...currentTask, subtasks: subtasks };
-
-      state.columns = state.columns
-        .map((col) => {
-          if (col.ID === currentTask.column_id) {
+        ...action.payload.columns
+          .map((col: any) => {
             return {
               ...col,
-              tasks: col.tasks.map((task: any) => {
-                if (task.ID === currentTask.ID) {
-                  return { ...task, subtasks: subtasks };
+              tasks: col.tasks.map((task: ITask) => {
+                if (task.ID === updatedTask.ID) {
+                  return { ...updatedTask };
                 }
-                return task;
+                return { ...task };
               }),
             };
-          }
-          return col;
-        })
-        .sort((a: any, b: any) => a.ID - b.ID);
-      state.selectedTask = { ...currentTask };
+          })
+          .sort((a: any, b: any) => a.ID - b.ID),
+      ];
+      state.selectedTask = { ...updatedTask };
     },
     toggleDarkMode: (state, action: PayloadAction<boolean>) => {
       state.isDarkMode = action.payload;

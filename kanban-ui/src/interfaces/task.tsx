@@ -9,6 +9,7 @@ export interface ITask {
 
 export interface ISubtask {
   ID: number;
+  tempID?: number;
   task_id: number;
   title: string;
   isCompleted: boolean;

@@ -194,26 +194,3 @@ export const deleteTask = (task: ITask, boardID: number) => {
     }
   };
 };
-
-export const updateSubTask = (updatedSubTask: ISubtask) => {
-  return async (dispatch: any) => {
-    const fetchData = async () => {
-      const response = await axios.patch(
-        `http://127.0.0.1:8080/boards/tasks/subtask`,
-        updatedSubTask
-      );
-      if (response.status !== 200 && response.status !== 201) {
-        throw new Error("Could not fetch data!");
-      }
-
-      return response.data.subtasks;
-    };
-
-    try {
-      const updatedSubTask = await fetchData();
-      dispatch(boardActions.updateSubtasks(updatedSubTask));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};

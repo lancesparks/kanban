@@ -25,6 +25,7 @@ const TaskInfo = ({
     completed: 0,
   });
   const isDarkMode = useSelector(({ boards }: any) => boards?.isDarkMode);
+  const currentTask = useSelector(({ boards }: any) => boards?.selectedTask);
 
   useEffect(() => {
     if (!task) {
@@ -32,15 +33,15 @@ const TaskInfo = ({
     }
     setSubtaskStatus(() => {
       return {
-        count: task.subtasks.length,
+        count: currentTask.subtasks.length,
         completed:
-          task.subtasks.length > 0
+          currentTask.subtasks.length > 0
             ? task.subtasks.filter((subtask: ISubtask) => subtask.isCompleted)
                 .length
             : 0,
       };
     });
-  }, [task]);
+  }, [currentTask]);
 
   let subtasks: ISubtask[] | null = null;
 
@@ -102,10 +103,7 @@ const TaskInfo = ({
                 subtasks?.map((subtask: ISubtask) => {
                   return (
                     <div key={subtask.ID}>
-                      <SubTaskInfo
-                        taskId={task.ID}
-                        subtask={subtask}
-                      ></SubTaskInfo>
+                      <SubTaskInfo task={task} subtask={subtask}></SubTaskInfo>
                     </div>
                   );
                 })}

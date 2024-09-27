@@ -81,17 +81,24 @@ const TaskEdit = ({
     });
   };
 
-  const handleUpdateSubTasks = (e: any, subtaskId: number) => {
+  const handleUpdateSubTasks = (e: any, updatedSubTask: ISubtask) => {
     setUpdatedTask((prev) => {
+      const subtasks = prev.subtasks;
+
       return {
         ...prev,
-        subtasks: prev.subtasks.map((subtask: ISubtask) => {
-          if (subtask.ID === subtaskId) {
-            return {
-              ...subtask,
-              title: e,
-            };
+        subtasks: subtasks.map((subtask: ISubtask) => {
+          if (
+            updatedSubTask.tempID &&
+            subtask.tempID === updatedSubTask.tempID
+          ) {
+            return { ...updatedSubTask, title: e };
           }
+
+          if (updatedSubTask.ID && subtask.ID === updatedSubTask.ID) {
+            return { ...updatedSubTask, title: e };
+          }
+
           return subtask;
         }),
       };
@@ -102,7 +109,13 @@ const TaskEdit = ({
     setUpdatedTask((prev) => {
       return {
         ...prev,
-        subtasks: prev.subtasks.filter((subtask: ISubtask) => subtask.ID !== e),
+        subtasks: prev.subtasks.filter((subtask: ISubtask) => {
+          if (e.tempID) {
+            return subtask.tempID !== e.tempID;
+          }
+
+          return subtask.ID !== e.ID;
+        }),
       };
     });
   };
@@ -120,22 +133,27 @@ const TaskEdit = ({
     handleTaskError(false);
     dispatch(updateTask(taskToSave, currentBoard.ID));
     // @ts-ignore
-    dispatch(boardActions.setSelectedTask(null));
+    // dispatch(boardActions.setSelectedTask(null));
 
     handleCloseDialog(false);
   };
 
   const handleAddSubTask = () => {
     setUpdatedTask((prev: any) => {
+      const tempID =
+        prev.subtasks.slice(-1)[0] == null
+          ? 1
+          : prev.subtasks.slice(-1)[0].ID != null
+          ? prev.subtasks.slice(-1)[0].ID + 1
+          : prev.subtasks.slice(-1)[0].tempID + 1;
       return {
         ...prev,
         subtasks: [
           ...prev.subtasks,
           {
-            ID: prev.subtasks.length + 10,
+            tempID,
             title: "",
             isCompleted: false,
-            taskId: prev.ID,
           },
         ],
       };
@@ -189,18 +207,17 @@ const TaskEdit = ({
       </section>
       <section className={classes.taskEdit_subtasks}>
         <h3>Subtasks</h3>
+
         {updatedTask.subtasks?.length > 0 &&
-          updatedTask.subtasks?.map((subtask: ISubtask) => {
+          updatedTask.subtasks?.map((sub: ISubtask) => {
             return (
-              <SubTaskEdit
-                key={subtask.ID}
-                ID={subtask.ID}
-                task_id={subtask.task_id}
-                title={subtask.title}
-                isCompleted={subtask.isCompleted}
-                handleUpdateSubTasks={handleUpdateSubTasks}
-                handleDeleteSubTasks={handleDeleteSubTasks}
-              ></SubTaskEdit>
+              <div key={sub.tempID || sub.task_id + sub.ID}>
+                <SubTaskEdit
+                  subtask={sub}
+                  handleUpdateSubTasks={handleUpdateSubTasks}
+                  handleDeleteSubTasks={handleDeleteSubTasks}
+                ></SubTaskEdit>
+              </div>
             );
           })}
         <a

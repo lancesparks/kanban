@@ -7,6 +7,7 @@ import AddBoardModal from "../addBoard/addBoard";
 import { updateBoard } from "../../state/board-action";
 import { AppDispatch } from "../../state/store";
 import EmptyBoard from "../emptyBoard/EmptyBoard";
+import { boardActions } from "../../state/boardSlice";
 const Board = () => {
   const currentBoard = useSelector(({ boards }: any) => boards.selectedBoard);
   const columns = useSelector(({ boards }: any) => boards.columns);
@@ -44,6 +45,10 @@ const Board = () => {
     dispatch(updateBoard(updatedBoard));
   };
 
+  const handleSetSelectedTask = (task: ITask) => {
+    dispatch(boardActions.setSelectedTask(task));
+  };
+
   return (
     <>
       <AddBoardModal
@@ -62,7 +67,14 @@ const Board = () => {
 
               {col?.tasks &&
                 col?.tasks.map((task: ITask) => {
-                  return <Task key={task.ID} task={task} />;
+                  return (
+                    <div
+                      key={task.ID}
+                      onClick={() => handleSetSelectedTask(task)}
+                    >
+                      <Task key={task.ID} task={task} />
+                    </div>
+                  );
                 })}
             </section>
           );
