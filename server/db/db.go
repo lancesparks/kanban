@@ -185,18 +185,52 @@ func GetTask(id any) (*Task, error) {
 }
 
 func UpdateTask(task *Task, boardID any) (*Task, []*Column, error) {
-   var taskToUpdate Task
-   result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
-   if result.RowsAffected == 0 {
-       return &taskToUpdate, nil, errors.New("task not updated")
-   }
+    var taskToUpdate Task
+    result := db.Model(&taskToUpdate).Where("id = ?", task.ID).Save(task)
+    if result.RowsAffected == 0 {
+        return &taskToUpdate, nil, errors.New("task not updated")
+    }
 
-   columns, err := GetColumns(boardID)
-   if err != nil {
-       return task, nil, err
-   }
+    columns, err := GetColumns(boardID)
+    if err != nil {
+        return task, nil, err
+    }
 
-   return task, columns, nil
+    // Get the existing subtasks for the task
+    var existingSubtasks []Subtask
+    db.Model(&Subtask{}).Where("task_id = ?", task.ID).Find(&existingSubtasks)
+
+    // Get the IDs of the subtasks in the payload
+    var subtaskIDsInPayload []uint
+    for _, subtask := range task.Subtasks {
+        subtaskIDsInPayload = append(subtaskIDsInPayload, subtask.ID)
+    }
+
+    // Get the IDs of the subtasks that exist in the database but are not in the payload
+    var subtaskIDsToDelete []uint
+    for _, subtask := range existingSubtasks {
+        found := false
+        for _, id := range subtaskIDsInPayload {
+            if subtask.ID == id {
+                found = true
+                break
+            }
+        }
+        if !found {
+            subtaskIDsToDelete = append(subtaskIDsToDelete, subtask.ID)
+        }
+    }
+
+
+
+    // Delete the subtasks that exist in the database but are not in the payload
+   if len(subtaskIDsToDelete) > 0 {
+    for _, id := range subtaskIDsToDelete {
+        db.Unscoped().Where("id = ?", id).Delete(&Subtask{})
+    }
+}
+
+    return task, columns, nil
 }
 
 func UpdateSubTask(subtask *Subtask) (*[]Subtask, error) {
